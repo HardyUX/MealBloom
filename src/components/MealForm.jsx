@@ -1,38 +1,17 @@
+// External libraries
 import React, { useState } from 'react';
 
-function formatDate(dateString) {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-       weekday: 'long',
-       month: 'short',
-       day: 'numeric', 
-    });
-}
+// Internal project files
+import { formatDate, getStartAndEndOfWeek } from '../utils/dateUtils';
+import { loadMeals, saveMeals } from '../utils/localStorageUtils';
 
-function getStartAndEndOfWeek(date) {
-    // Get start of the week (Sunday)
-    const startDate = new Date(date);
-    const day = startDate.getDay();
-    const diff = day === 0 ? -6 : 1 - day; // If Sunday (O), go back 6 days
-    startDate.setDate(startDate.getDate() + diff); // Start of the week (Sunday)
-    startDate.setHours(0, 0, 0, 0); // Clear time to 00:00:00
-
-    // Get end of the week (Saturday)
-    const endDate = new Date(startDate);
-    endDate.setDate(startDate.getDate() + 6); // End of week (Saturday)
-    endDate.setHours(23, 59, 59, 999); // Set to 23:59:59
-
-    return { startDate, endDate };
-}
 
 function MealForm() {
     const [date, setDate] = useState('');
     const [mealType, setMealType] = useState('Breakfast');
     const [mealName, setMealName] = useState('');
     const [meals, setMeals] = useState(() => {
-        // Load meals from localStorage when component mounts
-        const storedMeals = localStorage.getItem('meals');
-        return storedMeals ? JSON.parse(storedMeals) : [];
+        return loadMeals();
     });
     
     const [currentWeekStart, setCurrentWeekStart] = useState(() => {
@@ -58,20 +37,26 @@ function MealForm() {
 
     const { startDate, endDate } = getStartAndEndOfWeek(currentWeekStart.toISOString());
 
-    // Debug: Log the start and end of the week for comparison
-    console.log("Start of week:", startDate);
-    console.log("End of the week", endDate);
-
     const filteredMeals = meals.filter(meal => {
         const mealDate = new Date(meal.date);
-
-        // Debug: Log the date of each meal to ensure correct comparisons
-        console.log("Meal date:", meal.date, "Meal date object:", mealDate);
-
         return mealDate >= startDate && mealDate <= endDate;
     });
 
-    const groupedMeals = filteredMeals.reduce((acc, meal) => {
+    // Sort meals by date and meal type
+    const sortedMeals = [...filteredMeals].sort((a, b) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+
+        if (dateA < dateB) return -1;
+        if (dateA > dateB) return 1;
+
+        // If same day, sort by meal type (Breakfast > Lunch > Dinner)
+        const mealOrder = { Breakfast: 1, Lunch: 2, Dinner: 3};
+        return mealOrder[a.mealType] - mealOrder[b.mealType];
+    });
+
+    // Group the sorted meals
+    const groupedMeals = sortedMeals.reduce((acc, meal) => {
         const mealDate = meal.date;
         if (!acc[mealDate]) {
             acc[mealDate] = [];
@@ -80,19 +65,34 @@ function MealForm() {
         return acc;
     }, {});
 
+    const [editingMealId, setEditingMealId] = useState(null);
+
+
     function handleSubmit(e){
         e.preventDefault();
 
-        const newMeal = {
-            id: Date.now(),
-            date,
-            mealType,
-            mealName,
-        };
-
-        const updatedMeals = [...meals, newMeal];
-        setMeals(updatedMeals); // update state
-        localStorage.setItem('meals', JSON.stringify(updatedMeals)); // save to storage
+        if (editingMealId !== null) {
+            // Editing existing meal
+            const updatedMeals = meals.map(meal =>
+                meal.id === editingMealId
+                    ? { ...meal, date, mealType, mealName }
+                    : meal
+            );
+            setMeals(updatedMeals);
+            saveMeals(updatedMeals);
+            setEditingMealId(null); // Exit edit mode
+        } else {
+            // Adding new meal
+            const newMeal = {
+                id: Date.now(),
+                date,
+                mealType,
+                mealName,
+            };
+            const updatedMeals = [...meals, newMeal];
+            setMeals(updatedMeals); // update state
+            saveMeals(updatedMeals); // save to localStorage
+        }
 
         // Clear form
         setDate('');
@@ -100,11 +100,21 @@ function MealForm() {
         setMealName('');
     }
 
+
+    function handleEdit(meal) {
+        setEditingMealId(meal.id);
+        setDate(meal.date);
+        setMealType(meal.mealType);
+        setMealName(meal.mealName);
+    }
+
+
     function handleDelete(mealId) {
         const updatedMeals = meals.filter((meal) => meal.id !== mealId);
         setMeals(updatedMeals);
         localStorage.setItem('meals', JSON.stringify(updatedMeals));
     }
+
 
     return (
         <div>
@@ -131,7 +141,9 @@ function MealForm() {
                     onChange={(e) => setMealName(e.target.value)}
                 />
 
-                <button type="submit">Add Meal</button>
+                <button type="submit">
+                    {editingMealId !== null ? 'Update Meal' : 'Add Meal'}
+                </button>
             </form>
 
             <h2>Scheduled Meals</h2>
@@ -166,6 +178,20 @@ function MealForm() {
                                     <div>
                                         <strong>{meal.mealType}:</strong> {meal.mealName}
                                     </div>
+
+                                    <button
+                                        onClick={() => handleEdit(meal)}
+                                        style={{
+                                            padding: '4px 8px',
+                                            backgroundColor: '#4caf50',
+                                            color: 'white',
+                                            border: 'none',
+                                            borderRadius: '4px',
+                                            cursor: 'pointer',
+                                        }}
+                                    >
+                                        Edit
+                                    </button>
 
                                     <button
                                         onClick={() => handleDelete(meal.id)}
