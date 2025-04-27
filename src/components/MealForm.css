@@ -1,0 +1,57 @@
+/* Global form styles */
+.meal-form {
+    margin-bottom: 20px;
+}
+
+/* Meal List Item */
+.meal-item {
+    background: #f0f0f0;
+    margin-bottom: 8px;
+    padding: 10px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Meal Buttons */
+.meal-button {
+    padding: 4px 8px;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.meal-button-edit {
+    background-color: #4caf50
+}
+
+.meal-button-delete {
+    background-color: #ff5c5c;
+}
+
+/* Add Meal Button */
+.add-meal-button {
+    margin-top: 8px;
+    padding: 6px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Input Form Styles */
+.meal-input, .meal-select {
+    margin-bottom: 10px;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    width: 100%;
+}
+
+.meal-select {
+    margin-top: 5px;
+}

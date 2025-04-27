@@ -2,39 +2,106 @@
 import React, { useState } from 'react';
 
 // Internal project files
+import './MealForm.css';
 import { formatDate, getStartAndEndOfWeek } from '../utils/dateUtils';
 import { loadMeals, saveMeals } from '../utils/localStorageUtils';
 
 
 function MealForm() {
+    // State variables
     const [date, setDate] = useState('');
     const [mealType, setMealType] = useState('Breakfast');
     const [mealName, setMealName] = useState('');
-    const [meals, setMeals] = useState(() => {
-        return loadMeals();
-    });
-    
+    const [meals, setMeals] = useState(() => loadMeals ());
     const [currentWeekStart, setCurrentWeekStart] = useState(() => {
         const today = new Date();
         const { startDate } = getStartAndEndOfWeek(today);
         return startDate;
     });
+    const [editingMealId, setEditingMealId] = useState(null);
+    const [addingMealDate, setAddingMealDate] = useState(null); // Controls which day's Add Meal form is open
 
+
+    // Helper functions
+    function generateWeekDays(startDate) {
+        const days = [];
+        for (let i = 0; i < 7; i++) {
+            const day = new Date(startDate);
+            day.setDate(startDate.getDate() + i);
+            days.push(day);
+        }
+        return days;
+    }
 
     // Function to go to the previous week
     const goToPreviousWeek = () => {
         const newStartOfWeek = new Date(currentWeekStart);
         newStartOfWeek.setDate(currentWeekStart.getDate() - 7); // Move back 7 days
         setCurrentWeekStart(newStartOfWeek);
-    };
+    }
 
     // Function to go to the next week
     const goToNextWeek = () => {
         const newStartOfWeek = new Date(currentWeekStart);
         newStartOfWeek.setDate(currentWeekStart.getDate() + 7); // Move forward 7 days
         setCurrentWeekStart(newStartOfWeek);
-    };
+    }
 
+    function handleAddMeal(e, dateForMeal) {
+        e.preventDefault();
+
+        const newMeal = {
+            id: Date.now(),
+            date: dateForMeal,
+            mealType,
+            mealName,
+        };
+
+    const updatedMeals = [...meals, newMeal];
+    setMeals(updatedMeals);
+    saveMeals(updatedMeals);
+
+    // Reset form
+    setMealName('');
+    setMealType('Breakfast');
+    setAddingMealDate(null);
+    }
+
+
+    function handleEdit(meal) {
+        setEditingMealId(meal.id);
+        setDate(meal.date);
+        setMealType(meal.mealType);
+        setMealName(meal.mealName);
+    }
+
+    function handleUpdateMeal(e) {
+        e.preventDefault();
+
+        const updatedMeals = meals.map((meal) =>
+            meal.id === editingMealId
+                ? { ...meal, date, mealType, mealName }
+                : meal
+        );
+
+        setMeals(updatedMeals);
+        saveMeals(updatedMeals);
+        setEditingMealId(null);
+
+        // Clear form
+        setDate('');
+        setMealType('Breakfast');
+        setMealName('');
+    }
+
+    function handleDelete(mealId) {
+        const updatedMeals = meals.filter((meal) => meal.id !== mealId);
+        setMeals(updatedMeals);
+        saveMeals(updatedMeals);
+    }
+
+
+    // Filter and sort meals for the current week
     const { startDate, endDate } = getStartAndEndOfWeek(currentWeekStart.toISOString());
 
     const filteredMeals = meals.filter(meal => {
@@ -65,86 +132,39 @@ function MealForm() {
         return acc;
     }, {});
 
-    const [editingMealId, setEditingMealId] = useState(null);
-
-
-    function handleSubmit(e){
-        e.preventDefault();
-
-        if (editingMealId !== null) {
-            // Editing existing meal
-            const updatedMeals = meals.map(meal =>
-                meal.id === editingMealId
-                    ? { ...meal, date, mealType, mealName }
-                    : meal
-            );
-            setMeals(updatedMeals);
-            saveMeals(updatedMeals);
-            setEditingMealId(null); // Exit edit mode
-        } else {
-            // Adding new meal
-            const newMeal = {
-                id: Date.now(),
-                date,
-                mealType,
-                mealName,
-            };
-            const updatedMeals = [...meals, newMeal];
-            setMeals(updatedMeals); // update state
-            saveMeals(updatedMeals); // save to localStorage
-        }
-
-        // Clear form
-        setDate('');
-        setMealType('Breakfast');
-        setMealName('');
-    }
-
-
-    function handleEdit(meal) {
-        setEditingMealId(meal.id);
-        setDate(meal.date);
-        setMealType(meal.mealType);
-        setMealName(meal.mealName);
-    }
-
-
-    function handleDelete(mealId) {
-        const updatedMeals = meals.filter((meal) => meal.id !== mealId);
-        setMeals(updatedMeals);
-        localStorage.setItem('meals', JSON.stringify(updatedMeals));
-    }
-
 
     return (
         <div>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="date"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                />
+            {/* Global form for updating meals */}
+            {editingMealId !== null && (
+                <form className="meal-form" onSubmit={handleUpdateMeal} style={{ marginBottom: '20px' }}>
+                    <h3>Edit Meal</h3>
+                    <input
+                        className="meal-input"
+                        type="date"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                    />
+                    <select
+                        className="meal-select"
+                        value={mealType}
+                        onChange={(e) => setMealType(e.target.value)}
+                    >
+                        <option>Breakfast</option>
+                        <option>Lunch</option>
+                        <option>Dinner</option>
+                    </select>
+                    <input
+                        className="meal-input"
+                        type="text"
+                        placeholder="Meal Name"
+                        value={mealName}
+                        onChange={(e) => setMealName(e.target.value)}
+                    />
+                    <button type="submit" className="meal-button meal-button-edit">Update Meal</button>
+                </form>
+            )}
 
-                <select
-                    value={mealType}
-                    onChange={(e) => setMealType(e.target.value)}
-                >
-                    <option>Breakfast</option>
-                    <option>Lunch</option>
-                    <option>Dinner</option>
-                </select>
-
-                <input 
-                    type="text"
-                    placeholder="Meal Name"
-                    value={mealName}
-                    onChange={(e) => setMealName(e.target.value)}
-                />
-
-                <button type="submit">
-                    {editingMealId !== null ? 'Update Meal' : 'Add Meal'}
-                </button>
-            </form>
 
             <h2>Scheduled Meals</h2>
 
@@ -154,64 +174,70 @@ function MealForm() {
 
             <h3>Week of {currentWeekStart.toDateString()}</h3> 
 
-            {/* Display meals for the current week */}
-            {Object.keys(groupedMeals).length === 0 ? (
-                <p>No meals scheduled yet.</p>
-            ) : (
-                Object.entries(groupedMeals).map(([mealDate, mealsOnDate]) => (
-                    <div key={mealDate} style={{ marginBottom: '20px'}}>
-                        <h3>{formatDate(mealDate)}</h3>
+            {/* Full week display */}
+            {generateWeekDays(currentWeekStart).map((day) => {
+                const dateString = day.toISOString().split('T')[0];
+                const mealsOnThisDay = groupedMeals[dateString] || [];
+
+                return (
+                    <div key={dateString} className="meal-form">
+                        <h3>{formatDate(dateString)}</h3>
+
                         <ul style={{ listStyle: 'none', padding: 0}}>
-                            {mealsOnDate.map((meal) => (
-                                <li
-                                    key={meal.id}
-                                    style={{
-                                        background: '#f0f0f0',
-                                        marginBottom: '8px',
-                                        padding: '10px',
-                                        borderRadius: '6px',
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center',
-                                    }}
-                                >
+                            {mealsOnThisDay.map((meal) => (
+                                <li key={meal.id} className="meal-item">
                                     <div>
                                         <strong>{meal.mealType}:</strong> {meal.mealName}
                                     </div>
-
-                                    <button
-                                        onClick={() => handleEdit(meal)}
-                                        style={{
-                                            padding: '4px 8px',
-                                            backgroundColor: '#4caf50',
-                                            color: 'white',
-                                            border: 'none',
-                                            borderRadius: '4px',
-                                            cursor: 'pointer',
-                                        }}
-                                    >
-                                        Edit
-                                    </button>
-
-                                    <button
-                                        onClick={() => handleDelete(meal.id)}
-                                        style={{
-                                            padding: '4px 8px',
-                                            backgroundColor: '#ff5c5c',
-                                            color: 'white',
-                                            border: 'none',
-                                            borderRadius: '4px',
-                                            cursor: 'pointer',
-                                        }}
-                                    >
-                                        Delete
-                                    </button>
+                                    <div>
+                                        <button
+                                            onClick={() => handleEdit(meal)}
+                                            className="meal-button meal-button-edit"
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(meal.id)}
+                                            className="meal-button meal-button-delete"
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
                                 </li>
                             ))}
-                        </ul>     
+                        </ul>
+
+                        {/* Add Meal Button */}
+                        {addingMealDate === dateString ? (
+                            <form onSubmit={(e) => handleAddMeal(e, dateString)}>
+                                <select
+                                    value={mealType}
+                                    onChange={(e) => setMealType(e.target.value)}
+                                >
+                                    <option>Breakfast</option>
+                                    <option>Lunch</option>
+                                    <option>Dinner</option>
+                                </select>
+                                <input
+                                    className="meal-input"
+                                    type="text"
+                                    placeholder="Meal Name"
+                                    value={mealName}
+                                    onChange={(e) => setMealName(e.target.value)}
+                                />
+                                <button type="submit" className="meal-button">Save Meal</button>
+                            </form>
+                        ) : (
+                            <button
+                                onClick={() => setAddingMealDate(dateString)}
+                                className="add-meal-button"
+                            >
+                                Add Meal
+                            </button>
+                        )}
                     </div>
-                ))
-            )}
+                );
+            })}
         </div>
     );    
 }
