@@ -1,57 +1,149 @@
-/* Global form styles */
+@media (max-width: 768px) {
+    .meal-day-container {
+        padding: 12px;
+    }
+
+    .meal-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .meal-item div {
+        margin-bottom: 6px;
+    }
+
+    .add-meal-btn,
+    .edit-btn,
+    .delete-btn {
+        width: 100%;
+        margin-top: 6px;
+    }
+
+    .meal-form select,
+    .meal-form input {
+        width: 100%;
+        margin-bottom: 8 px;
+    }
+
+}
+
+/* General form styles */
 .meal-form {
-    margin-bottom: 20px;
-}
-
-/* Meal List Item */
-.meal-item {
-    background: #f0f0f0;
-    margin-bottom: 8px;
-    padding: 10px;
-    border-radius: 6px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
 }
 
-/* Meal Buttons */
-.meal-button {
-    padding: 4px 8px;
+.meal-input,
+.meal-select {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+/* Buttons */
+.meal-button,
+.add-meal-btn {
+    padding: 0.5rem 1rem;
+    background-color: #4caf50;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
-    margin-right: 5px;
+    font-weight: 600;
+}
+
+.add-meal-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.meal-button:hover,
+.add-meal-btn:hover {
+    background-color: #45a049;
 }
 
 .meal-button-edit {
-    background-color: #4caf50
+    background-color: #4caf50;
+}
+    
+.meal-button-edit:hover {
+    background-color: #388e3c;
 }
 
-.meal-button-delete {
-    background-color: #ff5c5c;
-}
-
-/* Add Meal Button */
-.add-meal-button {
-    margin-top: 8px;
-    padding: 6px 12px;
+.meal-button-add {
     background-color: #007bff;
-    color: white;
+}
+
+.meal-button-add:hover {
+    background-color: #0056b3;
+}
+
+/* Layout for each day */
+.meal-day-container {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/*Header for each day */
+.meal-day-header {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+}
+
+/* Meal list inside each day */
+.meal-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Individual meal items */
+.meal-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f1f5f9;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 6px;
+}
+
+/* Edit and delete buttons */
+.edit-btn,
+.delete-btn {
+    width: 40px;
+    height: 40px;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.9rem;
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
 
-/* Input Form Styles */
-.meal-input, .meal-select {
-    margin-bottom: 10px;
-    padding: 8px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    width: 100%;
+.edit-btn {
+    background-color: #4caf50;
+    color: white;
 }
 
-.meal-select {
-    margin-top: 5px;
+.edit-btn:hover {
+    background-color: #388e3c;
+}
+
+.delete-btn {
+    background-color: #ff5c5c;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #e60000;
 }
