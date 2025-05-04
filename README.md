@@ -24,6 +24,7 @@ A sleek and simple React-based meal planning app that helps users organize meals
 ```bash
 npm install
 npm run dev
+```
 
 ## ✨ Future Improvements
 
