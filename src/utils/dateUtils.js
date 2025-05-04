@@ -39,3 +39,15 @@ export function toLocalDateKey(dateInput) {
 }
 
 console.log("✅ dateUtils.js loaded");
+
+// Generate 7-day array starting from currentWeekStart
+    export function generateWeekDays(startDate) {
+        const start = new Date(startDate);
+        const days = [];
+        for (let i = 0; i < 7; i++) {
+            const day = new Date(start);
+            day.setDate(start.getDate() + i);
+            days.push(day);
+        }
+        return days;
+    }
