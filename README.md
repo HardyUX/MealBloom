@@ -33,3 +33,8 @@ npm run dev
 - Mobile optimization
 - Recipe integration
 - Shopping list integration
+
+---
+**Author:** Hartwig Thelen  
+**Purpose:** Created for educational and portfolio purposes  
+**Copyright:** © 2025 Hartwig Thelen. All rights reserved.
