@@ -45,7 +45,7 @@ export function toLocalDateKey(dateInput) {
         return days;
     }
 
-export function formatWeekRange(startDate, endDate) {
+export function formatWeekRange(startDate, endDate, { includeYear = true } = {}) {
     const start = new Date(startDate);
     const end = new Date(endDate);
 
@@ -61,10 +61,16 @@ export function formatWeekRange(startDate, endDate) {
     const endYear = end.getFullYear();
 
     if (sameMonth && sameYear) {
-        return `${startMonth} ${startDay} - ${endDay}, ${startYear}`;
+        return includeYear
+        ? `${startMonth} ${startDay} - ${endDay}, ${startYear}`
+        : `${startMonth} ${startDay} - ${endDay}`;
     } else if (sameYear) {
-        return `${startMonth} ${startDay} - ${endMonth} ${endDay}, ${startYear}`;
+        return includeYear
+        ? `${startMonth} ${startDay} - ${endMonth} ${endDay}, ${startYear}`
+        : `${startMonth} ${startDay} - ${endMonth} ${endDay}`;
     } else {
-        return `${startMonth} ${startDay}, ${startYear} - ${endMonth} ${endDay}, ${endYear}`;
+        return includeYear
+        ? `${startMonth} ${startDay}, ${startYear} - ${endMonth} ${endDay}, ${endYear}`
+        : `${startMonth} ${startDay}, ${startYear} - ${endMonth} ${endDay}`;
     }
 }

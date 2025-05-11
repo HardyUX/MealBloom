@@ -203,6 +203,7 @@ function MealForm() {
                     {viewMode === 'week' ? (
                         <>
                             <DropTargetButton
+                                title="Previous"
                                 direction="previous"
                                 onClick={goToPreviousWeek}
                                 onDropMeal={(meal) => {
@@ -215,14 +216,20 @@ function MealForm() {
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" />
                                 </svg>
-                                Previous
                             </DropTargetButton>
 
-                            <h3 className="text-xl font-semibold">
-                                {formatWeekRange(startDate, endDate)}
+                            {/* Mobile version (short) */}
+                            <h3 className="text-xl font-semibold block sm:hidden">
+                                {formatWeekRange(startDate, endDate, { includeYear: false })}
+                            </h3>
+
+                            {/* Desktop version (full) */}
+                            <h3 className="text-xl font-semibold hidden sm:block">
+                                {formatWeekRange(startDate, endDate, { includeYear: true })}
                             </h3>
                             
                             <DropTargetButton
+                                title="Next"
                                 direction="next"
                                 onClick={goToNextWeek}
                                 onDropMeal={(meal) => {
@@ -232,7 +239,6 @@ function MealForm() {
                                     goToNextWeek(); // Show updated week
                                 }}
                             >
-                                Next
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>
@@ -241,6 +247,7 @@ function MealForm() {
                     ) : (
                         <>
                             <button
+                                title="Previous"
                                 onClick={() => {
                                     const prev = new Date(calendarAnchorDate);
                                     prev.setMonth(prev.getMonth() - 1);
@@ -251,14 +258,15 @@ function MealForm() {
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" />
                                 </svg>
-                                Previous
                             </button>
 
+                            
                             <h3 className="text-xl font-semibold">
                                 {calendarAnchorDate.toLocaleString('en-US', { month: 'long', year: 'numeric'})}
                             </h3>
 
                             <button
+                                title="Next"
                                 onClick={() => {
                                     const next = new Date(calendarAnchorDate);
                                     next.setMonth(next.getMonth() + 1);
@@ -266,7 +274,6 @@ function MealForm() {
                                 }}
                                 className="px-4 py-2 bg-gray-200 hover: bg-gray-300 rounded"
                             >
-                                Next
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                                 </svg>
@@ -277,14 +284,14 @@ function MealForm() {
 
                 {/* =================== Daily Meal Cards =================== */}
                 {viewMode === 'week' && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 sm:gap-6">
                         {generateWeekDays(calendarAnchorDate).map((day) => {
                             const dateString = toLocalDateKey(day);
                             const mealsOnThisDay = groupedMeals[dateString] || [];
 
                             return (
                                 <DropZone key={dateString} dateString={dateString} onMealDrop={handleMealDrop}>
-                                    <h3 className="meal-day-header text-lg font-bold mb-2">{formatDate(dateString)}</h3>
+                                    <h3 className="meal-day-header text-lg font-bold mb-1 sm:mb-2">{formatDate(dateString)}</h3>
 
                                     <ul className="meal-list">
                                         {mealsOnThisDay.map((meal) => (
@@ -299,7 +306,7 @@ function MealForm() {
 
                                     {/* Add Meal Form */}
                                     {addingMealDate === dateString && (
-                                        <form onSubmit={(e) => handleAddMeal(e, dateString)} className="meal-form mt-2">
+                                        <form onSubmit={(e) => handleAddMeal(e, dateString)} className="meal-form mt-1 sm:mt-2">
                                             <select
                                                 value={mealType}
                                                 onChange={(e) => setMealType(e.target.value)}
@@ -341,7 +348,7 @@ function MealForm() {
                                     )}
 
                                         {/* Buttons: Add Meal + Use Template */}
-                                        <div className="flex gap-2 mt-2">
+                                        <div className="flex gap-2 mt-1 sm:mt-2">
                                             <button
                                                 onClick={() => setAddingMealDate(dateString)}
                                                 title="Add Meal"
@@ -364,7 +371,7 @@ function MealForm() {
                                         
                                         {/* Template Picker - shown independently */}
                                         {activeTemplateTargetDate === dateString && (
-                                            <div className="mt-2">
+                                            <div className="mt-1 sm:mt-2">
                                                 <MealTemplateLibrary
                                                     onUseTemplate={(template) => {
                                                         const newMeal = {

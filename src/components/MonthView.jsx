@@ -35,13 +35,13 @@ function MonthView({ meals, currentMonthStart, setCalendarAnchorDate, onMealDrop
 
     return (
         <div>
-            <div className="grid grid-cols-7 gap-2 text-center font-semibold mb-2">
+            <div className="grid grid-cols-7 gap-px sm:gap-2 text-center font-semibold mb-1 sm:mb-2">
                 {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
                     <div key={day}>{day}</div>
                 ))}
             </div>
 
-            <div className="grid grid-cols-7 gap-2">
+            <div className="grid grid-cols-7 gap-px sm:gap-2">
                 {days.map((day, index) => {
                     console.log(`[DEBUG] Day index ${index}:`, day);
 
