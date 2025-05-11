@@ -21,11 +21,6 @@ export function getStartAndEndOfWeek(date) {
     endDate.setDate(startDate.getDate() + 6); // 6 days after Monday = Sunday
     endDate.setHours(23, 59, 59, 999); // Set to 23:59:59
 
-    console.log("📆 getStartAndEndOfWeek called:");
-    console.log("Input Date:", current);
-    console.log("Calculated Start Date (Monday):", startDate);
-    console.log("Calculated End Date (Sunday):", endDate);
-
     return { startDate, endDate };
 }
 
@@ -38,8 +33,6 @@ export function toLocalDateKey(dateInput) {
     return `${year}-${month}-${day}`;
 }
 
-console.log("✅ dateUtils.js loaded");
-
 // Generate 7-day array starting from currentWeekStart
     export function generateWeekDays(startDate) {
         const start = new Date(startDate);
@@ -51,3 +44,27 @@ console.log("✅ dateUtils.js loaded");
         }
         return days;
     }
+
+export function formatWeekRange(startDate, endDate) {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    const sameMonth = start.getMonth() === end.getMonth();
+    const sameYear = start.getFullYear() === end.getFullYear();
+
+    const startDay = start.getDate();
+    const endDay = end.getDate();
+    const startMonth = start.toLocaleString('en-US', { month: 'short' });
+    const endMonth = end.toLocaleString('en-US', { month: 'short' });
+
+    const startYear = start.getFullYear();
+    const endYear = end.getFullYear();
+
+    if (sameMonth && sameYear) {
+        return `${startMonth} ${startDay} - ${endDay}, ${startYear}`;
+    } else if (sameYear) {
+        return `${startMonth} ${startDay} - ${endMonth} ${endDay}, ${startYear}`;
+    } else {
+        return `${startMonth} ${startDay}, ${startYear} - ${endMonth} ${endDay}, ${endYear}`;
+    }
+}
