@@ -10,6 +10,7 @@ import DropTargetButton from './DropTargetButton';
 import DropZone from './DropZone';
 import MonthView from './MonthView';
 import MealTemplateLibrary from './MealTemplateLibrary';
+import { useCalendar } from '../context/CalendarContext';
 
 
 function MealForm() {
@@ -18,8 +19,18 @@ function MealForm() {
     const [mealType, setMealType] = useState('Breakfast');
     const [mealName, setMealName] = useState('');
     const [meals, setMeals] = useState(() => loadMeals ());
-    const [viewMode, setViewMode] = useState('week'); // 'week' or 'month'
     const [activeTemplateTargetDate, setActiveTemplateTargetDate] = useState(null);
+
+    // Calendar state & navigation from context
+    const {
+        anchorDate: calendarAnchorDate,
+        startDate,
+        endDate,
+        viewMode,
+        setViewMode,
+        goPrevious: goToPreviousWeek,
+        goNext: goToNextWeek
+    } = useCalendar();
 
     // Drop handler
     function handleMealDrop(draggedMeal, newDate) {
@@ -34,31 +45,8 @@ function MealForm() {
     }
 
     // Compute the start of the current week (Monday)
-    const [calendarAnchorDate, setCalendarAnchorDate] = useState(() => {
-        const today = new Date();
-        const { startDate } = getStartAndEndOfWeek(today);
-        return startDate;
-    });
     const [editingMealId, setEditingMealId] = useState(null); // ID of meal being edited
     const [addingMealDate, setAddingMealDate] = useState(null); // Which day's form is visible
-
-    // Function to go to the previous week
-    const goToPreviousWeek = () => {
-        const previousWeek = new Date(calendarAnchorDate);
-        previousWeek.setDate(calendarAnchorDate.getDate() - 7); // Move back 7 days
-
-        const { startDate } = getStartAndEndOfWeek(previousWeek);
-        setCalendarAnchorDate(startDate);
-    }
-
-    // Function to go to the next week
-    const goToNextWeek = () => {
-        const nextWeek = new Date(calendarAnchorDate);
-        nextWeek.setDate(calendarAnchorDate.getDate() + 7); // Move forward 7 days
-
-        const { startDate } = getStartAndEndOfWeek(nextWeek);
-        setCalendarAnchorDate(startDate);
-    }
 
     function handleAddMeal(e, dateForMeal) {
         e.preventDefault();
@@ -112,10 +100,7 @@ function MealForm() {
         saveMeals(updatedMeals);
     }
 
-
     // Filter meals to only show those in the current visible week
-    const { startDate, endDate } = getStartAndEndOfWeek(toLocalDateKey(calendarAnchorDate));
-
     const filteredMeals = meals.filter(meal => {
         const mealDate = new Date(meal.date);
         return mealDate >= startDate && mealDate <= endDate;
@@ -248,11 +233,7 @@ function MealForm() {
                         <>
                             <button
                                 title="Previous"
-                                onClick={() => {
-                                    const prev = new Date(calendarAnchorDate);
-                                    prev.setMonth(prev.getMonth() - 1);
-                                    setCalendarAnchorDate(prev);
-                                }}
+                                onClick={goToPreviousWeek}
                                 className="px-4 py-2 bg-gray-200 hover: bg-gray-300 rounded"
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -267,11 +248,7 @@ function MealForm() {
 
                             <button
                                 title="Next"
-                                onClick={() => {
-                                    const next = new Date(calendarAnchorDate);
-                                    next.setMonth(next.getMonth() + 1);
-                                    setCalendarAnchorDate(next);
-                                }}
+                                onClick={goToNextWeek}
                                 className="px-4 py-2 bg-gray-200 hover: bg-gray-300 rounded"
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -401,8 +378,6 @@ function MealForm() {
                 {viewMode === 'month' && (
                     <MonthView
                         meals={meals}
-                        currentMonthStart={calendarAnchorDate}
-                        setCalendarAnchorDate={setCalendarAnchorDate}
                         onEdit={handleEdit}
                         onDelete={handleDelete}
                         onMealDrop={handleMealDrop}

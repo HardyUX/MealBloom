@@ -1,10 +1,11 @@
-import { useDrop } from 'react-dnd';
-import { toLocalDateKey } from '../utils/dateUtils';
-import DraggableMiniMeal from './DraggableMiniMeal';
+import { useCalendar } from '../context/CalendarContext';
+import DayCell from './DayCell';
 
-function MonthView({ meals, currentMonthStart, setCalendarAnchorDate, onMealDrop }) {
-    const monthStart = new Date(currentMonthStart);
-    monthStart.setDate(1); // Ensure we're starting from the 1st
+function MonthView({ meals, onMealDrop }) {
+    // Pull the "anchor" date for current month from context
+    const { anchorDate } = useCalendar();
+    const monthStart = new Date(anchorDate);
+    monthStart.setDate(1); // Make we're starting from the 1st
 
     const month = monthStart.getMonth();
     const year = monthStart.getFullYear();
@@ -42,69 +43,14 @@ function MonthView({ meals, currentMonthStart, setCalendarAnchorDate, onMealDrop
             </div>
 
             <div className="grid grid-cols-7 gap-px sm:gap-2">
-                {days.map((day, index) => {
-                    console.log(`[DEBUG] Day index ${index}:`, day);
-
-                    // Define dateKey
-                    const dateKey = day ? toLocalDateKey(day) : `null-${index}`;
-                    console.log(`[DEBUG] dateKey: ${dateKey}`);
-
-                    // Call useDrop()
-                    const [{ isOver }, drop] = useDrop(() => {
-                        console.log(`[DEBUG] useDrop() called at index ${index}`);
-                        return {
-                            accept: 'MEAL',
-                            drop: (item) => {
-                                console.log(`[DROP] Meal dropped:`, item.meal);
-                                if (day) {
-                                    onMealDrop(item.meal, dateKey);
-                                }
-                            },
-                            collect: (monitor) => ({
-                                isOver: monitor.isOver(),
-                            }),
-                        };
-                    });
-
-                    // Check if day is null
-                    if (!day) {
-                        console.log(`[CALENDAR] Empty padding cell at index ${index}`);
-                        return (
-                            <div
-                                key={index}
-                                ref={drop}
-                                className="min-h-[80px] bg-gray-100 rounded"
-                            /> // Empty padding cell
-                        );
-                    }
-
-                    // Proceed with real day logic
-                    const dayMeals = day
-                        ? meals.filter(meal => toLocalDateKey(meal.date) === dateKey)
-                        : [];
-
-                return (
-                    <div
-                        key={dateKey}
-                        ref={drop}
-                        className={`min-h-[80px] border rounded p-1 ${
-                            day ? 'bg-white border-gray-300' : 'bg-gray-100 border-transparent'
-                        } ${isOver ? 'bg-blue-100' : ''}`}
-                    >
-                        {day && (
-                            <>
-                                <div className="text-sm font-medium mb-1">
-                                    {day.getDate()}
-                                </div>
-                                {dayMeals.map(meal => (
-                                    <DraggableMiniMeal key={meal.id} meal={meal} />
-                                ))}
-                            </>
-                        )}
-                        
-                    </div>
-                );
-                })}
+                {days.map((day, i) => (
+                    <DayCell
+                        key={i}
+                        day={day}
+                        meals={meals}
+                        onMealDrop={onMealDrop}
+                    />
+                ))}
             </div>
         </div>
     );
