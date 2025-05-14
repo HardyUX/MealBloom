@@ -1,8 +1,9 @@
 import { useDrag } from 'react-dnd';
-import { saveMealTemplate } from '../utils/localStorageUtils';
+import { useTemplates } from '../context/TemplateContext';
 
 // Resusable components
 function DraggableMeal({ meal, onEdit, onDelete}) {
+    const { saveTemplate } = useTemplates();
     const [{ isDragging }, drag] = useDrag(() => ({
         type: 'MEAL',
         item: { meal },
@@ -45,10 +46,7 @@ function DraggableMeal({ meal, onEdit, onDelete}) {
                     </svg>
                 </button>
                 <button
-                    onClick={() => {
-                        const newTemplate = saveMealTemplate(meal);
-                        console.log(`[TEMPLATE] Saved:`, newTemplate);
-                    }}
+                    onClick={() => saveTemplate({ id: `template-${Date.now()}`, name: meal.mealName, mealType: meal.mealType })}
                     title="Save as template"
                     className="text-yellow-500 hover: text-yellow-600"
                 >

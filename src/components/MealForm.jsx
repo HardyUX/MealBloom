@@ -11,6 +11,7 @@ import DropZone from './DropZone';
 import MonthView from './MonthView';
 import MealTemplateLibrary from './MealTemplateLibrary';
 import { useCalendar } from '../context/CalendarContext';
+import { useTemplates } from '../context/TemplateContext';
 
 
 function MealForm() {
@@ -31,6 +32,9 @@ function MealForm() {
         goPrevious: goToPreviousWeek,
         goNext: goToNextWeek
     } = useCalendar();
+
+    // Templates state & actions from context
+    const { templates, saveTemplate, deleteTemplate } = useTemplates();
 
     // Drop handler
     function handleMealDrop(draggedMeal, newDate) {

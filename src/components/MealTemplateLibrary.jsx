@@ -1,9 +1,14 @@
 // MealTemplateLibrary.jsx
-import { loadMealTemplates } from "../utils/localStorageUtils";
+import { useTemplates } from '../context/TemplateContext';
+import { Trash2, Play } from 'lucide-react'; // Icons for delete and use
 
 function MealTemplateLibrary({ onUseTemplate }) {
-    // Load template data from localStorage
-    const templates = loadMealTemplates();
+    // Pull templates (and any CRUD actions) straight from context
+    const { templates, deleteTemplate } = useTemplates();
+
+    const handleUse = (template) => {
+        onUseTemplate(template);
+    };
 
     return (
         <div className="border rounded shadow bg-white p-4 max-w-sm">
@@ -24,12 +29,25 @@ function MealTemplateLibrary({ onUseTemplate }) {
                                 <span className="text-sm text-gray-500 ml-2">({template.mealType})</span>
                             </div>
 
-                            {/* Call parent callback when user clicks "Use" */}
+                            {/* Actions: Use and Delete */}
+                            <div className="flex items-center gap-2">
+                                {/* Delete icon button */}
+                                <button
+                                    className="delete-template p-1 rounded hover:bg-red-100"
+                                    aria-label={`Delete template ${template.name}`}
+                                    onClick={() => deleteTemplate(template.id)}
+                                >
+                                    <Trash2 size={16} className="text-red-600 hover:text-red-800" />
+                                </button>
+
+                            </div>
+
+                            {/* Use button */}
                             <button
                                 className="text-blue-600 hover:text-blue-800 text-sm"
-                                onClick={() => onUseTemplate(template)}
+                                onClick={() => handleUse(template)}
                             >
-                                Use
+                                <Play size={14} className="mr-1" /> Use
                             </button>
                         </li>
                     ))}
