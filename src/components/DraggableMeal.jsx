@@ -1,16 +1,10 @@
-import { useDrag } from 'react-dnd';
+import { useMealDrag } from '../hooks/useMealDrag';
 import { useTemplates } from '../context/TemplateContext';
 
 // Resusable components
 function DraggableMeal({ meal, onEdit, onDelete}) {
     const { saveTemplate } = useTemplates();
-    const [{ isDragging }, drag] = useDrag(() => ({
-        type: 'MEAL',
-        item: { meal },
-        collect: (monitor) => ({
-            isDragging: monitor.isDragging(),
-        }),
-    }));
+    const [{ isDragging }, drag] = useMealDrag(meal);
 
     return (
         <li
