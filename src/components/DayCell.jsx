@@ -1,4 +1,4 @@
-import { useDrop } from 'react-dnd';
+import { useMealDrop } from '../hooks/useMealDrop';
 import { toLocalDateKey } from '../utils/dateUtils';
 import DraggableMiniMeal from './DraggableMiniMeal';
 
@@ -6,13 +6,7 @@ export default function DayCell({ day, meals, onMealDrop }) {
     const dateKey = day ? toLocalDateKey(day) : null;
 
     // Hook at the top level
-    const [{ isOver }, drop] = useDrop({
-        accept: 'MEAL',
-        drop: (item) => {
-            if (day) onMealDrop(item.meal, dateKey);
-        },
-        collect: (m) => ({ isOver: m.isOver() }),
-    });
+    const [{ isOver }, drop] = useMealDrop(handleMealDrop);
 
     // Filter meals for this single day
     const dayMeals = day
