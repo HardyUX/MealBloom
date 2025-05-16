@@ -1,17 +1,7 @@
-import { useDrop } from 'react-dnd';
+import { useMealDrop } from '../hooks/useMealDrop';
 
 function DropZone({ dateString, children, onMealDrop }) {
-    console.log("[DropZone] dateString:", dateString);
-    const [{ isOver }, drop] = useDrop(() => ({
-        accept: 'MEAL',
-        drop: (item) => {
-            console.log("[DropZone] drop", { item, dateString });
-            onMealDrop(item.meal, item.fromDate, dateString);
-        },
-        collect: (monitor) => ({
-            isOver: monitor.isOver(),
-        }),
-    }));
+    const [{ isOver }, drop] = useMealDrop(onMealDrop, dateString);
 
     return (
         <div
