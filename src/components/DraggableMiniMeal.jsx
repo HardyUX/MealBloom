@@ -4,7 +4,7 @@ import { useDrag } from 'react-dnd';
 function DraggableMiniMeal({ meal }) {
     const [{ isDragging }, drag] = useDrag(() => ({
         type: 'MEAL',
-        item: { meal },
+        item: { meal, fromDate: meal.date },
         collect: (monitor) => ({
             isDragging: monitor.isDragging(),
         }),

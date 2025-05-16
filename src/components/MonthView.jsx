@@ -31,9 +31,6 @@ function MonthView({ meals, onMealDrop }) {
         days.push(null);
     }
 
-    console.log(`[DEBUG] Rendering MonthView for: ${monthStart.toDateString()}`);
-    console.log(`[DEBUG] days.length: ${days.length}`);
-
     return (
         <div>
             <div className="grid grid-cols-7 gap-px sm:gap-2 text-center font-semibold mb-1 sm:mb-2">

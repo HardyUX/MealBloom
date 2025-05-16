@@ -4,6 +4,7 @@ import { useTemplates } from '../context/TemplateContext';
 // Resusable components
 function DraggableMeal({ meal, onEdit, onDelete}) {
     const { saveTemplate } = useTemplates();
+    console.log('[DraggableMeal] meal prop:', meal);
     const [{ isDragging }, drag] = useMealDrag({ ...meal, fromDate: meal.date });
 
     return (

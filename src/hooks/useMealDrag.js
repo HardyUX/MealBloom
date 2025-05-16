@@ -7,11 +7,16 @@ import { useDrag } from 'react-dnd';
  * @returns {[{ isDragging: boolean }, React.Ref]} - drag state and ref.
  */
 export function useMealDrag(meal) {
-    const [{ isDragging }, dragRef] = useDrag(() => ({
-        type: 'MEAL',
-        item: { meal, fromDate: meal.date },
-        collect: (monitor) => ({ isDragging: monitor.isDragging() }),
-    }), [meal]);
+    const [{ isDragging }, dragRef] = useDrag(() => {
+        const dragItem = { meal, fromDate: meal.date };
+        console.log('[useMealDrag] Drag started:', dragItem);
+        return {
+            type: 'MEAL',
+            item: dragItem,
+            collect: (monitor) => ({ isDragging: monitor.isDragging() }),
+        };
+        
+    }, [meal]);
 
     return [{ isDragging }, dragRef];
 }
