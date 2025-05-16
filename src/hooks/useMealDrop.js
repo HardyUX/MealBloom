@@ -6,14 +6,15 @@ import { useDrop } from 'react-dnd';
  * @param {Function} onDrop - Callback when a meal is dropped.
  * @returns {[{ isOver: boolean}, React.Ref]} - drop state and ref.
  */
-export function useMealDrop(onDrop) {
+export function useMealDrop(onDrop, toDate) {
     const [{ isOver }, dropRef] = useDrop(() => ({
         accept: 'MEAL',
-        drop: (item) => onDrop(item.meal),
-        collect: (monitor) => ({
-            isOver: monitor.isOver(),
-        }),
-    }), [onDrop]);
+        drop: (item) => {
+            console.log("[useMealDrop] dropping", { item, toDate });
+            onDrop(item.meal, item.fromDate, toDate);
+        },
+        collect: (monitor) => ({ isOver: monitor.isOver(), }),
+    }), [onDrop, toDate]);
 
     return [{ isOver }, dropRef];
 }

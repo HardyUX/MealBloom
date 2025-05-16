@@ -4,9 +4,7 @@ import DraggableMiniMeal from './DraggableMiniMeal';
 
 export default function DayCell({ day, meals, onMealDrop }) {
     const dateKey = day ? toLocalDateKey(day) : null;
-
-    // Hook at the top level
-    const [{ isOver }, drop] = useMealDrop(handleMealDrop);
+    const [{ isOver }, drop] = useMealDrop(onMealDrop, dateKey);
 
     // Filter meals for this single day
     const dayMeals = day

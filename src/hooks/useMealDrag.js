@@ -9,10 +9,8 @@ import { useDrag } from 'react-dnd';
 export function useMealDrag(meal) {
     const [{ isDragging }, dragRef] = useDrag(() => ({
         type: 'MEAL',
-        item: { meal },
-        collect: (monitor) => ({
-            isDragging: monitor.isDragging(),
-        }),
+        item: { meal, fromDate: meal.date },
+        collect: (monitor) => ({ isDragging: monitor.isDragging() }),
     }), [meal]);
 
     return [{ isDragging }, dragRef];

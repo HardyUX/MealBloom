@@ -4,7 +4,7 @@ import { useTemplates } from '../context/TemplateContext';
 // Resusable components
 function DraggableMeal({ meal, onEdit, onDelete}) {
     const { saveTemplate } = useTemplates();
-    const [{ isDragging }, drag] = useMealDrag(meal);
+    const [{ isDragging }, drag] = useMealDrag({ ...meal, fromDate: meal.date });
 
     return (
         <li
@@ -32,7 +32,10 @@ function DraggableMeal({ meal, onEdit, onDelete}) {
                     </svg>
                 </button>
                 <button
-                    onClick={() => onDelete(meal.id)}
+                    onClick={() => {
+                            console.log('[DraggableMeal] Delete clicked', meal.id, meal.date);
+                            onDelete(meal.id, meal.date)
+                        }}
                     className="delete-btn text-red-600 hover:text-red-800"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">

@@ -12,6 +12,7 @@ import MonthView from './MonthView';
 import MealTemplateLibrary from './MealTemplateLibrary';
 import { useCalendar } from '../context/CalendarContext';
 import { useTemplates } from '../context/TemplateContext';
+import { moveMeal, deleteMeal } from '../utils/mealHandlers';
 
 
 function MealForm() {
@@ -37,13 +38,10 @@ function MealForm() {
     const { templates, saveTemplate, deleteTemplate } = useTemplates();
 
     // Drop handler
-    function handleMealDrop(draggedMeal, newDate) {
-        const updatedMeals = meals.map((meal) =>
-            meal.id === draggedMeal.id
-                ? { ...meal, date: newDate }
-                : meal
-            );
-
+    function handleMealDrop(draggedMeal, fromDate, toDate) {
+        console.log("[DROP]", { draggedMeal, fromDate, toDate, mealsBefore: meals });
+        const updatedMeals = moveMeal(meals, draggedMeal, fromDate, toDate);
+        console.log("[AFTER MOVE]", { updatedMeals });
         setMeals(updatedMeals);
         saveMeals(updatedMeals);
     }
@@ -98,8 +96,10 @@ function MealForm() {
         setMealName('');
     }
 
-    function handleDelete(mealId) {
-        const updatedMeals = meals.filter((meal) => meal.id !== mealId);
+    function handleDelete(mealId, mealDate) {
+        console.log("[DELETE]", { mealId, mealDate, mealsBefore: meals });
+        const updatedMeals = deleteMeal(meals, mealId, mealDate);
+        console.log("[DELETE] after filter", updatedMeals);
         setMeals(updatedMeals);
         saveMeals(updatedMeals);
     }
