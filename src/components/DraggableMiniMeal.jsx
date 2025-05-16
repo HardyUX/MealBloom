@@ -1,14 +1,12 @@
-// DraggableMiniMeal.jsx
-import { useDrag } from 'react-dnd';
+import { useMealDrag } from '../hooks/useMealDrag';
+
+/**
+ * Draggable mini meal icon for Month View.
+ * Uses the unified useMealDrag hook for consistent drag payloads.
+ */
 
 function DraggableMiniMeal({ meal }) {
-    const [{ isDragging }, drag] = useDrag(() => ({
-        type: 'MEAL',
-        item: { meal, fromDate: meal.date },
-        collect: (monitor) => ({
-            isDragging: monitor.isDragging(),
-        }),
-    }));
+    const [{ isDragging }, drag] = useMealDrag(meal);
 
     return (
         <div
