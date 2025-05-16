@@ -1,7 +1,14 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useDrop } from 'react-dnd';
 import { toLocalDateKey } from '../utils/dateUtils';
 
+/**
+ * DropTargetButton: Navigates on drag-over and handles meal drops
+ * @param {('next'|'previous')} direction
+ * @param {Function} onClick
+ * @param {Function} onDropMeal
+ * @param {React.ReactNode} children
+ */
 function DropTargetButton({ direction, onClick, onDropMeal, children}) {
     const timeoutRef = useRef(null);
     const [isHovering, setIsHovering] = useState(false);
@@ -28,7 +35,7 @@ function DropTargetButton({ direction, onClick, onDropMeal, children}) {
             if (!timeoutRef.current) {
                 timeoutRef.current = setTimeout(() => {
                     onClick(); // Navigate to next/previous week
-                    timeoutRef.current = null; // Reset
+                    timeoutRef.current = null;
                 }, 800); // Delay before auto-navigation
             }
 
@@ -45,7 +52,7 @@ function DropTargetButton({ direction, onClick, onDropMeal, children}) {
             onDropMeal(item.meal, toLocalDateKey(newDate));
         },
         leave: () => {
-            cancelHoverTimer(),
+            cancelHoverTimer();
             setIsHovering(false);
         } 
     });
