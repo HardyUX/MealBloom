@@ -37,6 +37,7 @@ function DraggableMeal({ meal, onEdit, onDelete}) {
                             console.log('[DraggableMeal] Delete clicked', meal.id, meal.date);
                             onDelete(meal.id, meal.date)
                         }}
+                    title="Delete"
                     className="delete-btn text-red-600 hover:text-red-800"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
