@@ -5,7 +5,7 @@ describe('Meal Edit in Week View', () => {
     // Seed with a test meal on a visible day
     cy.window().then(win => {
       win.localStorage.setItem(
-        'meal',
+        'meals',
         JSON.stringify([
           {
             id: 2,

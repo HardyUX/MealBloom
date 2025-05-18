@@ -3,8 +3,7 @@ import { useState } from 'react';
 
 // Internal project files
 import './MealForm.css';
-import { formatDate, getStartAndEndOfWeek, toLocalDateKey, generateWeekDays, formatWeekRange } from '../utils/dateUtils';
-import { loadMeals, saveMeals } from '../utils/localStorageUtils';
+import { formatDate, toLocalDateKey, generateWeekDays, formatWeekRange } from '../utils/dateUtils';
 import DraggableMeal from './DraggableMeal';
 import DropTargetButton from './DropTargetButton';
 import DropZone from './DropZone';
@@ -12,15 +11,14 @@ import MonthView from './MonthView';
 import MealTemplateLibrary from './MealTemplateLibrary';
 import { useCalendar } from '../context/CalendarContext';
 import { useTemplates } from '../context/TemplateContext';
-import { moveMeal, deleteMeal } from '../utils/mealHandlers';
+import { useMeals } from '../context/MealContext';
 
 
 function MealForm() {
-    // Initialize state for form inputs, meal list, and UI state
+    // Form UI state
     const [date, setDate] = useState('');
     const [mealType, setMealType] = useState('Breakfast');
     const [mealName, setMealName] = useState('');
-    const [meals, setMeals] = useState(() => loadMeals ());
     const [activeTemplateTargetDate, setActiveTemplateTargetDate] = useState(null);
 
     // Calendar state & navigation from context
@@ -34,42 +32,28 @@ function MealForm() {
         goNext: goToNextWeek
     } = useCalendar();
 
-    // Templates state & actions from context
+    // Templates state & actions from TemplateContext
     const { templates, saveTemplate, deleteTemplate } = useTemplates();
 
-    // Drop handler
-    function handleMealDrop(draggedMeal, fromDate, toDate) {
-        console.log("[DROP]", { draggedMeal, fromDate, toDate, mealsBefore: meals });
-        const updatedMeals = moveMeal(meals, draggedMeal, fromDate, toDate);
-        console.log("[AFTER MOVE]", { updatedMeals });
-        setMeals(updatedMeals);
-        saveMeals(updatedMeals);
-    }
+    // Meal state & actions from MealContext
+    const { meals, addMeal, updateMeal, deleteMeal, moveMeal } = useMeals();
 
-    // Compute the start of the current week (Monday)
-    const [editingMealId, setEditingMealId] = useState(null); // ID of meal being edited
-    const [addingMealDate, setAddingMealDate] = useState(null); // Which day's form is visible
+    // Local state for editing and adding meal forms
+    const [editingMealId, setEditingMealId] = useState(null);
+    const [addingMealDate, setAddingMealDate] = useState(null);
 
+    // Add meal handler (calls context)
     function handleAddMeal(e, dateForMeal) {
         e.preventDefault();
+        addMeal({ id: Date.now(), date: dateForMeal, mealType, mealName });
 
-        const newMeal = {
-            id: Date.now(),
-            date: dateForMeal,
-            mealType,
-            mealName,
-        };
-
-    const updatedMeals = [...meals, newMeal];
-    setMeals(updatedMeals);
-    saveMeals(updatedMeals);
-
-    // Reset form
-    setMealName('');
-    setMealType('Breakfast');
-    setAddingMealDate(null);
+        // Clear form
+        setMealName('');
+        setMealType('Breakfast');
+        setAddingMealDate(null);
     }
 
+    // Edit setup
     function handleEdit(meal) {
         setEditingMealId(meal.id);
         setDate(meal.date);
@@ -77,17 +61,15 @@ function MealForm() {
         setMealName(meal.mealName);
     }
 
+    // Update meal handler (calls context)
     function handleUpdateMeal(e) {
         e.preventDefault();
-
-        const updatedMeals = meals.map((meal) =>
-            meal.id === editingMealId
-                ? { ...meal, date, mealType, mealName }
-                : meal
-        );
-
-        setMeals(updatedMeals);
-        saveMeals(updatedMeals);
+        updateMeal({
+            id: editingMealId,
+            date,
+            mealType,
+            mealName,
+        });
         setEditingMealId(null);
 
         // Clear form
@@ -96,12 +78,14 @@ function MealForm() {
         setMealName('');
     }
 
+    // Delete meal handler (calls context)
     function handleDelete(mealId, mealDate) {
-        console.log("[DELETE]", { mealId, mealDate, mealsBefore: meals });
-        const updatedMeals = deleteMeal(meals, mealId, mealDate);
-        console.log("[DELETE] after filter", updatedMeals);
-        setMeals(updatedMeals);
-        saveMeals(updatedMeals);
+        deleteMeal(mealId, mealDate);
+    }
+
+    // DnD handler (calls context)
+    function handleMealDrop(draggedMeal, fromDate, toDate) {
+        moveMeal(draggedMeal, fromDate, toDate);
     }
 
     // Filter meals to only show those in the current visible week
@@ -350,7 +334,7 @@ function MealForm() {
                                             </button>
                                         </div>
                                         
-                                        {/* Template Picker - shown independently */}
+                                        {/* Template Picker */}
                                         {activeTemplateTargetDate === dateString && (
                                             <div className="mt-1 sm:mt-2">
                                                 <MealTemplateLibrary
@@ -363,8 +347,7 @@ function MealForm() {
                                                         };
 
                                                         const updatedMeals = [...meals, newMeal];
-                                                        setMeals(updatedMeals);
-                                                        saveMeals(updatedMeals);
+                                                        addMeal(newMeal);
 
                                                         // Close the template picker after inserting
                                                         setActiveTemplateTargetDate(null);
