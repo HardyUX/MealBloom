@@ -21,6 +21,7 @@ export default function DayCell({ day, meals, onMealDrop }) {
             className={`min-h-[60px] sm:min-h-[80px] rounded p-1
                 ${day ? 'bg-white border border-gray-300' : 'bg-gray-100'}
                 ${isOver ? 'bg-blue-100' : ''}`}
+            data-date={day ? toLocalDateKey(day) : undefined}
         >
             {day && (
                 <>
