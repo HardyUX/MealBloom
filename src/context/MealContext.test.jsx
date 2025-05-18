@@ -1,31 +1,38 @@
 import { useEffect } from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MealProvider, useMeals } from './MealContext';
 
-// A simple consumer to help us trigger context actions
-function TestConsumer({ action, actionArgs, onReady }) {
-    const { meals, addMeal, updateMeal, deleteMeal, moveMeal } = useMeals();
-
-    useEffect(() => {
-        if (action === 'add') {
-            addMeal(...actionArgs);
-        }
-        if (action === 'update') {
-            updateMeal(...actionArgs);
-        }
-        if (action === 'delete') {
-            deleteMeal(...actionArgs);
-        }
-        if (action === 'move') {
-            moveMeal(...actionArgs);
-        }
-        // Wait a tick, then report back
-        setTimeout(() => onReady(meals), 10);
-        // eslint-disable-next-line
-    }, [action, actionArgs]);
-
-    return <div data-testid="meals-count">{meals.length}</div>;
+function makeMeal({ id, date, mealType, mealName }) {
+    return { id, date, mealType, mealName }; 
 }
+
+// --- Test Consumers ---
+
+function AddConsumer({ meal }) {
+    const { meals, addMeal } = useMeals();
+    useEffect(() => { addMeal(meal); }, [addMeal, meal]);
+    return <div data-testid="meals">{JSON.stringify(meals)}</div>;
+}
+
+function UpdateConsumer({ update }) {
+    const { meals, updateMeal } = useMeals();
+    useEffect(() => { updateMeal(update); }, [updateMeal, update]);
+    return <div data-testid="meals">{JSON.stringify(meals)}</div>;
+}
+
+function DeleteConsumer({ mealId, mealDate }) {
+    const { meals, deleteMeal } = useMeals();
+    useEffect(() => { deleteMeal(mealId, mealDate); }, [deleteMeal, mealId, mealDate]);
+    return <div data-testid="meals">{JSON.stringify(meals)}</div>;
+}
+
+function MoveConsumer({ meal, fromDate, toDate }) {
+    const { meals, moveMeal } = useMeals();
+    useEffect(() => { moveMeal(meal, fromDate, toDate); }, [moveMeal, meal, fromDate, toDate]);
+    return <div data-testid="meals">{JSON.stringify(meals)}</div>;
+}
+
+// --- Test Suite ---
 
 describe('MealContext', () => {
     beforeEach(() => {
@@ -33,65 +40,64 @@ describe('MealContext', () => {
         jest.clearAllMocks();
     });
 
-    it('adds a meal', (done) => {
-        const meal = { id: 123, date: '2025-06-01', mealType: 'Dinner', mealName: 'Pizza' };
-
-        let result;
+    it('adds a meal', async () => {
+        const meal = { id: 1, date: '2025-06-01', mealType: 'Dinner', mealName: 'Pizza' };
+        
         render(
             <MealProvider>
-                <TestConsumer action="add" actionArgs={[meal]} onReady={(meals) => { result = meals; done(); }} />
+                <AddConsumer meal={meal} />
             </MealProvider>
         );
-
-        // The meals list should contain the new meal
-        setTimeout(() => {
-            expect(result).toEqual([meal]);
-        }, 15);
+        await waitFor(() => {
+            expect(screen.getByTestId('meals').textContent).toContain('Pizza');
+        });
     });
 
-    it('updates a meal', (done) => {
-        const meal = { id: 100, date: '2025-06-01', mealType: 'Lunch', mealName: 'OldName' };
+    it('updates a meal', async () => {
+        const origMeal = makeMeal ({ id: 2, date: '2025-06-01', mealType: 'Lunch', mealName: 'Salad' });
         // Pre-load the meal
-        localStorage.setItem('meals', JSON.stringify([meal]));
+        localStorage.setItem('meals', JSON.stringify([origMeal]));
+        const updatedMeal = makeMeal({ id: 2, date: '2025-06-02', mealType: 'Dinner', mealName: 'Updated'});
 
-        let result;
         render(
             <MealProvider>
-                <TestConsumer
-                    action="update"
-                    actionArgs={[{ id: 100, date: '2025-06-02', mealType: 'Dinner', mealName: 'NewName' }]}
-                    onReady={(meals) => { result = meals; done(); }}
-                />
+                <UpdateConsumer update={updatedMeal} />
             </MealProvider>
         );
-
-        setTimeout(() => {
-            expect(result).toEqual([
-                { id: 100, date: '2025-06-02', mealType: 'Dinner', mealName: 'NewName' }
-            ]);
-        }, 15);
+        await waitFor(() => {
+            expect(screen.getByTestId('meals').textContent).toContain('Updated');
+            expect(screen.getByTestId('meals').textContent).toContain('2025-06-02');
+        });
     });
 
-    it('deletes a meal', (done) => {
-        const meal1 = { id: 1, date: '2025-06-01', mealType: 'Breakfast', mealName: 'Eggs' };
-        const meal2 = { id: 2, date: '2025-06-02', mealType: 'Dinner', mealName: 'Steak' };
+    it('deletes a meal', async () => {
+        const meal1 = { id: 3, date: '2025-06-01', mealType: 'Breakfast', mealName: 'Eggs' };
+        const meal2 = { id: 4, date: '2025-06-02', mealType: 'Dinner', mealName: 'Steak' };
         localStorage.setItem('meals', JSON.stringify([meal1, meal2]));
 
-        let result;
         render(
             <MealProvider>
-                <TestConsumer
-                    action="delete"
-                    actionArgs={[2, '2025-06-02']}
-                    onReady={(meals) => { result = meals; done(); }}
-                />
+                <DeleteConsumer mealId={4} mealDate={'2025-06-02'} />
             </MealProvider>
         );
+        await waitFor(() => {
+            expect(screen.getByTestId('meals').textContent).not.toContain('Steak');
+            expect(screen.getByTestId('meals').textContent).toContain('Eggs');
+        });
+    });
 
-        setTimeout(() => {
-            expect(result).toEqual([
-                { id: 77, date: '2025-06-04', mealType: 'Lunch', mealName: 'Salad' }
-            ]);
-        }, 15);
+    it('moves a meal', async () => {
+        const meal = { id: 5, date: '2025-06-03', mealType: 'Lunch', mealName: 'Salad' };
+        localStorage.setItem('meals', JSON.stringify([meal]));
+
+        render(
+            <MealProvider>
+                <MoveConsumer meal={meal} fromDate={'2025-06-03'} toDate={'2025-06-04'} />
+            </MealProvider>
+        );
+        await waitFor(() => {
+            expect(screen.getByTestId('meals').textContent).toContain('2025-06-04');
+            expect(screen.getByTestId('meals').textContent).not.toContain('2025-06-03');
+        });
     });
 });
