@@ -9,6 +9,10 @@ export default function DayCell({ day, meals, onMealDrop }) {
     // Filter meals for this single day
     const dayMeals = day
         ? meals.filter(m => toLocalDateKey(m.date) === dateKey)
+                .sort((a, b) => {
+                    const order = { Breakfast: 1, Lunch: 2, Dinner: 3};
+                    return order[a.mealType] - order[b.mealType];
+                })
         : [];
 
     return (
