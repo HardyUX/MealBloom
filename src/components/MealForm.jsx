@@ -1,5 +1,5 @@
 // External libraries
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
 // Internal project files
 import './MealForm.css';
@@ -58,14 +58,16 @@ function MealForm() {
     const sortedMeals = sortedMealsForDateRange(startDate, endDate);
 
     // Group meals by date string (YYYY-MM-DD)
-    const groupedMeals = sortedMeals.reduce((acc, meal) => {
-        const mealDate = toLocalDateKey(meal.date);
-        if (!acc[mealDate]) {
-            acc[mealDate] = [];
-            }
-        acc[mealDate].push(meal);
-        return acc;
-    }, {});
+    const groupedMeals = useMemo(() => {
+        return sortedMeals.reduce((acc, meal) => {
+            const mealDate = toLocalDateKey(meal.date);
+            if (!acc[mealDate]) {
+                acc[mealDate] = [];
+                }
+            acc[mealDate].push(meal);
+            return acc;
+        }, {});
+    }) 
 
 
     return (
