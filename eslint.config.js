@@ -3,6 +3,7 @@ import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import cypress from 'eslint-plugin-cypress'
+import cypressGlobals from 'eslint-plugin-cypress/lib/globals'
 
 export default [
   { ignores: [
@@ -45,12 +46,12 @@ export default [
       globals: {
         ...globals.browser,
         ...globals.node,
+        ...cypressGlobals,
       },
     },
-    settings: {},
-    env: {
-      'cypress/globals': true,
-    },
     extends: ['plugin:cypress/recommended'],
+    rules: {
+      // Custom Cypress rule overrides (if any)
+    }
   },
 ]
