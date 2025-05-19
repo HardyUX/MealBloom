@@ -37,7 +37,39 @@ export function MealProvider({ children }) {
         setMeals((prev) => moveMealUtil(prev, draggedMeal, fromDate, toDate));
     }, []);
 
-    // ---- Filtering, grouping, etc. can go here (with useMemo) ----
+    // ---- Optimized selectors (useMemo) ----
+
+    // Usage: mealsForDateRange(startDate, endDate)
+    const mealsForDateRange = useCallback((startDate, endDate) => {
+        return useMemo(
+            () =>
+                meals.filter(meal => {
+                    const mealDate = new Date(meal.date);
+                    return mealDate >= startDate && mealDate <= endDate;
+                }),
+            [meals, startDate, endDate]
+        );
+    }, [meals]);
+
+    // Usage: sortedMealsForDateRange(startDate, endDate)
+    const sortedMealsForDateRange = useCallback((startDate, endDate) => {
+        return useMemo(() => {
+            const mealOrder = { Breakfast: 1, Lunch: 2, Dinner: 3};
+            return meals
+                .filter(meal => {
+                    const mealDate = new Date(meal.date);
+                    return mealDate >= startDate && mealDate <= endDate;
+                })
+                .sort((a, b) => {
+                    const dateA = new Date(a.date);
+                    const dateB = new Date(b.date);
+                    if (dateA < dateB) return -1;
+                    if (dateA > dateB) return 1;
+                    return mealOrder[a.mealType] - mealOrder[b.mealType];
+                });
+        }, [meals, startDate, endDate]);
+    }, [meals]);
+
 
     return (
         <MealContext.Provider
@@ -47,6 +79,8 @@ export function MealProvider({ children }) {
                 updateMeal,
                 deleteMeal,
                 moveMeal,
+                mealsForDateRange,
+                sortedMealsForDateRange,
                 setMeals, // Expose if needed, but usually not 
             }}
         >

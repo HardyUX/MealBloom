@@ -37,7 +37,7 @@ function MealForm() {
     const { templates, saveTemplate, deleteTemplate } = useTemplates();
 
     // Meal state & actions from MealContext
-    const { meals, addMeal, updateMeal, deleteMeal, moveMeal } = useMeals();
+    const { meals, addMeal, updateMeal, deleteMeal, moveMeal, sortedMealsForDateRange } = useMeals();
 
     // Edit meal handler
     function handleEdit(meal) {
@@ -54,24 +54,8 @@ function MealForm() {
         moveMeal(draggedMeal, fromDate, toDate);
     }
 
-    // Filter meals to only show those in the current visible week
-    const filteredMeals = meals.filter(meal => {
-        const mealDate = new Date(meal.date);
-        return mealDate >= startDate && mealDate <= endDate;
-    });
-
-    // Sort by date
-    const sortedMeals = [...filteredMeals].sort((a, b) => {
-        const dateA = new Date(a.date);
-        const dateB = new Date(b.date);
-
-        if (dateA < dateB) return -1;
-        if (dateA > dateB) return 1;
-
-        // If same day, sort by meal type (Breakfast > Lunch > Dinner)
-        const mealOrder = { Breakfast: 1, Lunch: 2, Dinner: 3};
-        return mealOrder[a.mealType] - mealOrder[b.mealType];
-    });
+    // Use optimized selector for visible week meals
+    const sortedMeals = sortedMealsForDateRange(startDate, endDate);
 
     // Group meals by date string (YYYY-MM-DD)
     const groupedMeals = sortedMeals.reduce((acc, meal) => {
