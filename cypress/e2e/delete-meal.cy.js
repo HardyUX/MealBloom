@@ -9,7 +9,7 @@ describe('Meal Delete in Week View', () => {
         JSON.stringify([
           {
             id: 1,
-            date: '2025-05-13', // Match a visible day label
+            date: '2025-05-20', // Match a visible day label
             mealType: 'Lunch',
             mealName: 'Cypress Delete Test'
           }
@@ -22,7 +22,7 @@ describe('Meal Delete in Week View', () => {
     cy.contains('Week View').should('exist').click();
 
     // Alias the day containing the seeded meal
-    cy.contains('.meal-day-container', 'Tuesday, May 13').as('mealDay');
+    cy.contains('.meal-day-container', 'Tuesday, May 20').as('mealDay');
 
     // Assert the meal is present before delete
     cy.get('@mealDay').should('contain.text', 'Cypress Delete Test');

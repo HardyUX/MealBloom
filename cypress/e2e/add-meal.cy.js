@@ -6,7 +6,7 @@ describe('Meal Add in Week View', () => {
     cy.contains('Week View').should('exist').click();
 
     // Pick a visible day (adjust the label to match your UI, e.g. "Tuesday, May 13")
-    cy.contains('.meal-day-container', 'Tuesday, May 13').as('targetDay');
+    cy.contains('.meal-day-container', 'Tuesday, May 20').as('targetDay');
 
     // Click the Add Meal ("+" button) in the target day
     cy.get('@targetDay').find('button[title="Add Meal"]').click();

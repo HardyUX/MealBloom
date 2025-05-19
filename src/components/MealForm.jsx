@@ -13,11 +13,11 @@ import { useCalendar } from '../context/CalendarContext';
 import { useTemplates } from '../context/TemplateContext';
 import { useMeals } from '../context/MealContext';
 import AddMealForm from './AddMealForm';
+import EditMealForm from './EditMealForm';
 
 
 function MealForm() {
     // State for editing and adding meal forms
-    const [date, setDate] = useState('');
     const [editingMealId, setEditingMealId] = useState(null);
     const [addingMealDate, setAddingMealDate] = useState(null);
     const [activeTemplateTargetDate, setActiveTemplateTargetDate] = useState(null);
@@ -39,29 +39,9 @@ function MealForm() {
     // Meal state & actions from MealContext
     const { meals, addMeal, updateMeal, deleteMeal, moveMeal } = useMeals();
 
-    // Edit setup
+    // Edit meal handler
     function handleEdit(meal) {
         setEditingMealId(meal.id);
-        setDate(meal.date);
-        setMealType(meal.mealType);
-        setMealName(meal.mealName);
-    }
-
-    // Update meal handler (calls context)
-    function handleUpdateMeal(e) {
-        e.preventDefault();
-        updateMeal({
-            id: editingMealId,
-            date,
-            mealType,
-            mealName,
-        });
-        setEditingMealId(null);
-
-        // Clear form
-        setDate('');
-        setMealType('Breakfast');
-        setMealName('');
     }
 
     // Delete meal handler (calls context)
@@ -108,34 +88,16 @@ function MealForm() {
         <div className="min-h-screen bg-gray-100">
             <div className="max-w-6xl mx-auto px-4 py-8">
 
-                {/* Edit Meal form */}
+                {/* =================== Edit Meal form =================== */}
                 {editingMealId !== null && (
-                    <form className="meal-form" onSubmit={handleUpdateMeal}>
-                        <h3 className="text-lg font-semibold mb-2">Edit Meal</h3>
-                        <input
-                            className="meal-input"
-                            type="date"
-                            value={date}
-                            onChange={(e) => setDate(e.target.value)}
-                        />
-                        <select
-                            className="meal-select"
-                            value={mealType}
-                            onChange={(e) => setMealType(e.target.value)}
-                        >
-                            <option>Breakfast</option>
-                            <option>Lunch</option>
-                            <option>Dinner</option>
-                        </select>
-                        <input
-                            className="meal-input"
-                            type="text"
-                            placeholder="Meal Name"
-                            value={mealName}
-                            onChange={(e) => setMealName(e.target.value)}
-                        />
-                        <button type="submit" className="meal-button meal-button-edit">Update Meal</button>
-                    </form>
+                    <EditMealForm
+                        meal={meals.find(m => m.id === editingMealId)}
+                        onUpdate={(updatedMeal) => {
+                            updateMeal(updatedMeal);
+                            setEditingMealId(null);
+                        }}
+                        onCancel={() => setEditingMealId(null)}
+                    />
                 )}
 
 
