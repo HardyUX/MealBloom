@@ -12,13 +12,14 @@ import MealTemplateLibrary from './MealTemplateLibrary';
 import { useCalendar } from '../context/CalendarContext';
 import { useTemplates } from '../context/TemplateContext';
 import { useMeals } from '../context/MealContext';
+import AddMealForm from './AddMealForm';
 
 
 function MealForm() {
-    // Form UI state
+    // State for editing and adding meal forms
     const [date, setDate] = useState('');
-    const [mealType, setMealType] = useState('Breakfast');
-    const [mealName, setMealName] = useState('');
+    const [editingMealId, setEditingMealId] = useState(null);
+    const [addingMealDate, setAddingMealDate] = useState(null);
     const [activeTemplateTargetDate, setActiveTemplateTargetDate] = useState(null);
 
     // Calendar state & navigation from context
@@ -37,21 +38,6 @@ function MealForm() {
 
     // Meal state & actions from MealContext
     const { meals, addMeal, updateMeal, deleteMeal, moveMeal } = useMeals();
-
-    // Local state for editing and adding meal forms
-    const [editingMealId, setEditingMealId] = useState(null);
-    const [addingMealDate, setAddingMealDate] = useState(null);
-
-    // Add meal handler (calls context)
-    function handleAddMeal(e, dateForMeal) {
-        e.preventDefault();
-        addMeal({ id: Date.now(), date: dateForMeal, mealType, mealName });
-
-        // Clear form
-        setMealName('');
-        setMealType('Breakfast');
-        setAddingMealDate(null);
-    }
 
     // Edit setup
     function handleEdit(meal) {
@@ -271,45 +257,19 @@ function MealForm() {
 
                                     {/* Add Meal Form */}
                                     {addingMealDate === dateString && (
-                                        <form onSubmit={(e) => handleAddMeal(e, dateString)} className="meal-form mt-1 sm:mt-2">
-                                            <select
-                                                value={mealType}
-                                                onChange={(e) => setMealType(e.target.value)}
-                                                className="meal-select"
-                                            >
-                                                <option>Breakfast</option>
-                                                <option>Lunch</option>
-                                                <option>Dinner</option>
-                                            </select>
-                                            <input
-                                                type="text"
-                                                placeholder="Meal Name"
-                                                value={mealName}
-                                                onChange={(e) => setMealName(e.target.value)}
-                                                className="meal-input"
-                                            />
-
-                                            {/* Save and Cancel Button */}
-                                            <div className="flex gap-2">
-                                                <button
-                                                    type="submit"
-                                                    className="text-white bg-green-500 hover:bg-green-600 px-3 py-2 rounded"
-                                                >
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                                                    </svg>
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    className="text-white bg-gray-500 hover:bg-gray-600 px-3 py-2 rounded"
-                                                    onClick={() => setAddingMealDate(null)}
-                                                >
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                        </form>
+                                        <AddMealForm
+                                            dateString={dateString}
+                                            onAdd={({ mealType, mealName }) => {
+                                                addMeal({
+                                                    id: Date.now(),
+                                                    date: dateString,
+                                                    mealType,
+                                                    mealName
+                                                });
+                                                setAddingMealDate(null);
+                                            }}
+                                            onCancel={() => setAddingMealDate(null)}
+                                        />
                                     )}
 
                                         {/* Buttons: Add Meal + Use Template */}
