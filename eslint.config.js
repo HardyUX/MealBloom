@@ -40,7 +40,7 @@ export default [
   },
   // CYPRESS FLAT CONFIG
   {
-    ...pluginCypress,
+    ...pluginCypress.configs.recommended,
     files: ['cypress/**/*.js'],
   },
 ]
