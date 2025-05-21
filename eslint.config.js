@@ -2,8 +2,7 @@ import js from '@eslint/js'
 import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
-import cypress from 'eslint-plugin-cypress'
-import cypressGlobals from 'eslint-plugin-cypress/lib/globals'
+import pluginCypress from 'eslint-plugin-cypress/flat'
 
 export default [
   { ignores: [
@@ -39,19 +38,9 @@ export default [
       ],
     },
   },
+  // CYPRESS FLAT CONFIG
   {
+    ...pluginCypress,
     files: ['cypress/**/*.js'],
-    plugins: { cypress },
-    languageOptions: {
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-        ...cypressGlobals,
-      },
-    },
-    extends: ['plugin:cypress/recommended'],
-    rules: {
-      // Custom Cypress rule overrides (if any)
-    }
   },
 ]
