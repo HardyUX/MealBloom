@@ -10,7 +10,6 @@ import DropZone from './DropZone';
 import MonthView from './MonthView';
 import MealTemplateLibrary from './MealTemplateLibrary';
 import { useCalendar } from '../context/CalendarContext';
-import { useTemplates } from '../context/TemplateContext';
 import { useMeals } from '../context/MealContext';
 import AddMealForm from './AddMealForm';
 import EditMealForm from './EditMealForm';
@@ -33,8 +32,6 @@ function MealForm() {
         goNext: goToNextWeek
     } = useCalendar();
 
-    // Templates state & actions from TemplateContext
-    const { /* Template actions */ } = useTemplates();
 
     // Meal state & actions from MealContext
     const { meals, addMeal, updateMeal, deleteMeal, moveMeal, sortedMealsForDateRange } = useMeals();

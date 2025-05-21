@@ -1,9 +1,9 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import pluginCypress from 'eslint-plugin-cypress/flat'
-import pluginJest from 'eslint-plugin-jest/flat'
+import js from '@eslint/js';
+import globals from 'globals';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import pluginCypress from 'eslint-plugin-cypress/flat';
+import jestPlugin from 'eslint-plugin-jest';
 
 export default [
   { ignores: [
@@ -15,7 +15,7 @@ export default [
       'cypress/screenshots/**',
   ] },
   {
-    files: ['**/*.{js,jsx}'],
+    files: ['src/**/*.{js,jsx}'],
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
@@ -39,6 +39,18 @@ export default [
       ],
     },
   },
+
+  // --- CommonJS files ---
+  {
+    files: ['tailwind.config.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+      sourceType: 'commonjs',
+    },
+  },
+
   // --- CYPRESS ---
   {
     ...pluginCypress.configs.recommended,
@@ -46,7 +58,7 @@ export default [
   },
   // --- JEST ---
   {
-    ...pluginJest.configs.recommended,
     files: ['**/*.test.js', '**/*.test.jsx'],
+    ...jestPlugin.configs['flat/recommended'],
   },
 ]

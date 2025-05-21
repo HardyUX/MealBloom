@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { loadMeals, saveMeals } from '../utils/localStorageUtils';
 import { moveMeal as moveMealUtil, deleteMeal as deleteMealUtil } from '../utils/mealHandlers';
 
@@ -40,20 +40,15 @@ export function MealProvider({ children }) {
     // ---- Optimized selectors (useMemo) ----
 
     // Usage: mealsForDateRange(startDate, endDate)
-    const mealsForDateRange = useCallback((startDate, endDate) => {
-        return useMemo(
-            () =>
-                meals.filter(meal => {
-                    const mealDate = new Date(meal.date);
-                    return mealDate >= startDate && mealDate <= endDate;
-                }),
-            [meals, startDate, endDate]
-        );
-    }, [meals]);
+    const mealsForDateRange = (startDate, endDate) => {
+        meals.filter(meal => {
+            const mealDate = new Date(meal.date);
+            return mealDate >= startDate && mealDate <= endDate;
+        });
+    };
 
     // Usage: sortedMealsForDateRange(startDate, endDate)
-    const sortedMealsForDateRange = useCallback((startDate, endDate) => {
-        return useMemo(() => {
+    const sortedMealsForDateRange = (startDate, endDate) => {
             const mealOrder = { Breakfast: 1, Lunch: 2, Dinner: 3};
             return meals
                 .filter(meal => {
@@ -67,8 +62,7 @@ export function MealProvider({ children }) {
                     if (dateA > dateB) return 1;
                     return mealOrder[a.mealType] - mealOrder[b.mealType];
                 });
-        }, [meals, startDate, endDate]);
-    }, [meals]);
+    };
 
 
     return (
