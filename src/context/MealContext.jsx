@@ -1,7 +1,6 @@
 import { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import { loadMeals, saveMeals } from '../utils/localStorageUtils';
 import { moveMeal as moveMealUtil, deleteMeal as deleteMealUtil } from '../utils/mealHandlers';
-import { toLocalDateKey } from '../utils/dateUtils';
 
 // Create context
 const MealContext = createContext();

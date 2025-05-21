@@ -1,5 +1,4 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { loadMeals, saveMeals } from '../utils/localStorageUtils';
 
 const TemplateContext = createContext();
 

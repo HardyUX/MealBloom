@@ -3,6 +3,7 @@ import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import pluginCypress from 'eslint-plugin-cypress/flat'
+import pluginJest from 'eslint-plugin-jest/flat'
 
 export default [
   { ignores: [
@@ -38,9 +39,14 @@ export default [
       ],
     },
   },
-  // CYPRESS FLAT CONFIG
+  // --- CYPRESS ---
   {
     ...pluginCypress.configs.recommended,
     files: ['cypress/**/*.js'],
+  },
+  // --- JEST ---
+  {
+    ...pluginJest.configs.recommended,
+    files: ['**/*.test.js', '**/*.test.jsx'],
   },
 ]

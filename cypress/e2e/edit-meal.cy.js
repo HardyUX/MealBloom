@@ -34,7 +34,8 @@ describe('Meal Edit in Week View', () => {
       .click();
 
       // Fill out the edit form
-      cy.get('input[type="text"]').clear().type('Edited Salad');
+      cy.get('input[type="text"]').clear()
+      cy.get('input[type="text"]').type('Edited Salad');
       cy.get('select').select('Dinner');
 
       // Save changes (the checkmark button)

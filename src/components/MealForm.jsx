@@ -34,7 +34,7 @@ function MealForm() {
     } = useCalendar();
 
     // Templates state & actions from TemplateContext
-    const { templates, saveTemplate, deleteTemplate } = useTemplates();
+    const { /* Template actions */ } = useTemplates();
 
     // Meal state & actions from MealContext
     const { meals, addMeal, updateMeal, deleteMeal, moveMeal, sortedMealsForDateRange } = useMeals();
@@ -254,7 +254,6 @@ function MealForm() {
                                                             mealName: template.name
                                                         };
 
-                                                        const updatedMeals = [...meals, newMeal];
                                                         addMeal(newMeal);
 
                                                         // Close the template picker after inserting

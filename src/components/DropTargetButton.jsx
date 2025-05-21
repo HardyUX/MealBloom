@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState } from 'react';
 import { useDrop } from 'react-dnd';
 import { toLocalDateKey } from '../utils/dateUtils';
 
@@ -11,7 +11,7 @@ import { toLocalDateKey } from '../utils/dateUtils';
  */
 function DropTargetButton({ direction, onClick, onDropMeal, children}) {
     const timeoutRef = useRef(null);
-    const [isHovering, setIsHovering] = useState(false);
+    const [setIsHovering] = useState(false);
 
     function cancelHoverTimer() {
         if (timeoutRef.current) {
