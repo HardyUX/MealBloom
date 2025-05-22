@@ -54,7 +54,17 @@
     font-weight: 600;
 }
 
-.add-meal-btn {
+.use-template-btn {
+    background-color: #ffd600;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.add-meal-btn,
+.use-template-btn {
     width: 40px;
     height: 40px;
     display: flex;
@@ -66,6 +76,10 @@
 .meal-button:hover,
 .add-meal-btn:hover {
     background-color: #45a049;
+}
+
+.use-template-btn:hover {
+    background-color: #ffc300;
 }
 
 .meal-button-edit {
