@@ -74,3 +74,20 @@ export function formatWeekRange(startDate, endDate, { includeYear = true } = {})
         : `${startMonth} ${startDay}, ${startYear} - ${endMonth} ${endDay}`;
     }
 }
+
+export function isToday(date) {
+    if (!date) return false;
+    const today = new Date();
+    return (
+        date.getDate() === today.getDate() &&
+        date.getMonth() === today.getMonth() &&
+        date.getFullYear() === today.getFullYear()
+    );
+}
+
+export function isWeekend(date) {
+    if (!date) return false;
+    const day = date.getDay();
+    // 0 = Sunday, 6 = Saturday
+    return day === 0 || day === 6;
+}
