@@ -18,11 +18,12 @@ export default function Header() {
     const { moveMeal } = useMeals()
 
     return (
-        <header className="flex items-center bg-gray-100 py-2 px-4 sm:py-3 sm:px-6 shadow gap-4">
+        <header className="bg-gray-100 py-2 shadow">
+            <div className="max-w-6xl mx-auto px-6 sm:px-8 flex items-center gap-10">
             <img
                 src={logoSrc}
                 alt="MealBloom Logo"
-                className="w-[150px] h-[150px] flex-shrink-0"
+                className="w-24 h-24 flex-shrink-0"
             />
 
             {/* =================== Week Header & Navigation =================== */}
@@ -44,7 +45,7 @@ export default function Header() {
             </div>
 
             {/* Navigation between weeks */}
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-6 gap-4">
                 {viewMode === 'week' ? (
                     <>
                         <DropTargetButton
@@ -115,6 +116,8 @@ export default function Header() {
                 )}
             </div>
 
-        </header>
+        </div>
+    </header>
+        
     );
 }
