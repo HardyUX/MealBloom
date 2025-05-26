@@ -3,6 +3,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { CalendarProvider } from './context/CalendarContext';
 import { TemplateProvider } from './context/TemplateContext';
 import { MealProvider } from './context/MealContext';
+import Header from './components/Header';
 import MealForm from './components/MealForm';
 
 function App() {
@@ -11,7 +12,10 @@ function App() {
       <CalendarProvider>
         <TemplateProvider>
           <MealProvider>
-            <MealForm />
+            <>
+              <Header />
+              <MealForm />
+            </>
           </MealProvider>
         </TemplateProvider>
       </CalendarProvider>

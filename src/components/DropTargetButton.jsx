@@ -1,17 +1,22 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { useDrop } from 'react-dnd';
 import { toLocalDateKey } from '../utils/dateUtils';
+import { useMeals } from '../context/MealContext';
+import { useCalendar } from '../context/CalendarContext';
 
 /**
- * DropTargetButton: Navigates on drag-over and handles meal drops
- * @param {('next'|'previous')} direction
- * @param {Function} onClick
- * @param {Function} onDropMeal
- * @param {React.ReactNode} children
+ * A button that you can click to go prev/next *or* drop a meal onto it
+ * to move that meal one week backward/forward.
+ * 
+ * Props:
+ *  - direction: 'previous' | 'next'
+ *  - children: your arrow icon or text
  */
-function DropTargetButton({ direction, onClick, onDropMeal, children}) {
+export default function DropTargetButton({ direction, children}) {
+    const { moveMeal } = useMeals();
+    const { goPrevious, goNext } = useCalendar();
     const timeoutRef = useRef(null);
-    const [setIsHovering] = useState(false);
+
 
     function cancelHoverTimer() {
         if (timeoutRef.current) {
@@ -28,48 +33,51 @@ function DropTargetButton({ direction, onClick, onDropMeal, children}) {
         hover: (item, monitor) => {
             if (!monitor.isOver({ shallow: true })) {
                 cancelHoverTimer();
-                setIsHovering(false);
                 return;
             }
 
             if (!timeoutRef.current) {
                 timeoutRef.current = setTimeout(() => {
-                    onClick(); // Navigate to next/previous week
+                    direction === 'next' ? goNext() : goPrevious()
                     timeoutRef.current = null;
                 }, 800); // Delay before auto-navigation
             }
-
-            setIsHovering(true);
-
         },
         drop: (item) => {
             cancelHoverTimer();
 
+            // Compute old/new date keys
             const offSet = direction === 'next' ? 7 : -7;
+            const fromKey = toLocalDateKey(item.meal.date);
             const newDate = new Date(item.meal.date);
             newDate.setDate(newDate.getDate() + offSet);
+            const toKey = toLocalDateKey(newDate);
 
-            onDropMeal(item.meal, toLocalDateKey(newDate));
+            // Actually move the meal, *then* navigate
+            moveMeal(item.meal, fromKey, toKey);
+            direction === 'next' ? goNext() : goPrevious()
         },
         leave: () => {
             cancelHoverTimer();
-            setIsHovering(false);
         } 
     });
+
+    // Simple click fallback
+    const handleClick = () => {
+        direction === 'next' ? goNext() : goPrevious()
+    }
 
     return (
             <button
                 ref={drop}
+                onClick={handleClick}
                 className={`flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-transform duration-200
                     ${direction === 'next' ? 'ml-3' : ''}
                     ${isOver ? 'bg-blue-300 scale-105' : 'bg-gray-200 hover:bg-gray-300'}
                     ${isOver ? (direction === 'next' ? 'animate-wiggle-right' : 'animate-wiggle-left') : ''}
                 `}
-                onClick={onClick}
             >
                 {children}
             </button>
     );
 }
-
-export default DropTargetButton;
