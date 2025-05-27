@@ -112,17 +112,6 @@
     margin: 0;
 }
 
-/* Individual meal items */
-.meal-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #f1f5f9;
-    padding: 0.5rem;
-    margin-bottom: 0.5rem;
-    border-radius: 6px;
-}
-
 /* Edit and delete buttons */
 .edit-btn,
 .delete-btn {
