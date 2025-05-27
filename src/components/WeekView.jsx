@@ -19,7 +19,7 @@ function WeekView({
     setActiveTemplateTargetDate,
 }) {
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 sm:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-7 gap-2">
             {generateWeekDays(calendarAnchorDate).map((day) => {
                 const dateString = toLocalDateKey(day);
                 const mealsOnThisDay = groupedMeals[dateString] || [];
@@ -28,6 +28,7 @@ function WeekView({
 
                 return (
                         <DropZone
+                            className="min-w-[160px] md:min-w-[200px] max-w-full flex-1"
                             key={dateString}
                             dateString={dateString}
                             onMealDrop={handleMealDrop}

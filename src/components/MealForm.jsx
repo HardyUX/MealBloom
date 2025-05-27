@@ -62,49 +62,50 @@ function MealForm() {
 
     return (
 
-            <div className="min-h-screen bg-gray-100">
-                <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="min-h-screen bg-gray-100">
+            <div className="w-full max-w-[1680px] mx-auto py-4">
+                <div className="overflow-x-auto">
 
-                    {/* =================== Edit Meal form =================== */}
-                    {editingMealId !== null && (
-                        <EditMealForm
-                            meal={meals.find(m => m.id === editingMealId)}
-                            onUpdate={(updatedMeal) => {
-                                updateMeal(updatedMeal);
-                                setEditingMealId(null);
-                            }}
-                            onCancel={() => setEditingMealId(null)}
-                        />
-                    )}
+                {/* =================== Edit Meal form =================== */}
+                {editingMealId !== null && (
+                    <EditMealForm
+                        meal={meals.find(m => m.id === editingMealId)}
+                        onUpdate={(updatedMeal) => {
+                            updateMeal(updatedMeal);
+                            setEditingMealId(null);
+                        }}
+                        onCancel={() => setEditingMealId(null)}
+                    />
+                )}
 
 
-                    {/* =================== Daily Meal Cards =================== */}
-                    {viewMode === 'week' && (
-                        <WeekView
-                            calendarAnchorDate={calendarAnchorDate}
-                            groupedMeals={groupedMeals}
-                            handleMealDrop={handleMealDrop}
-                            handleEdit={handleEdit}
-                            handleDelete={handleDelete}
-                            addMeal={addMeal}
-                            addingMealDate={addingMealDate}
-                            setAddingMealDate={setAddingMealDate}
-                            activeTemplateTargetDate={activeTemplateTargetDate}
-                            setActiveTemplateTargetDate={setActiveTemplateTargetDate}
-                        /> 
-                    )}
+                {/* =================== Daily Meal Cards =================== */}
+                {viewMode === 'week' && (
+                    <WeekView
+                        calendarAnchorDate={calendarAnchorDate}
+                        groupedMeals={groupedMeals}
+                        handleMealDrop={handleMealDrop}
+                        handleEdit={handleEdit}
+                        handleDelete={handleDelete}
+                        addMeal={addMeal}
+                        addingMealDate={addingMealDate}
+                        setAddingMealDate={setAddingMealDate}
+                        activeTemplateTargetDate={activeTemplateTargetDate}
+                        setActiveTemplateTargetDate={setActiveTemplateTargetDate}
+                    /> 
+                )}
 
-                    {viewMode === 'month' && (
-                        <MonthView
-                            meals={meals}
-                            onEdit={handleEdit}
-                            onDelete={handleDelete}
-                            onMealDrop={handleMealDrop}
-                        />
-                    )}
-
+                {viewMode === 'month' && (
+                    <MonthView
+                        meals={meals}
+                        onEdit={handleEdit}
+                        onDelete={handleDelete}
+                        onMealDrop={handleMealDrop}
+                    />
+                )}
                 </div>
-            </div>  
+            </div>
+        </div>  
     );
 
 

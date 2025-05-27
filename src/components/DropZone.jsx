@@ -6,8 +6,12 @@ function DropZone({ dateString, children, onMealDrop, highlight }) {
     return (
         <div
             ref={drop}
-            className={
-                `meal-day-container ${isOver ? 'bg-blue-100' : ''} ${highlight ? " ring-2 ring-blue-400" : ""}`}
+            className={[
+                "bg-white border border-gray-200 rounded-lg p-4 mb-6",
+                "min-w-[160px] md:min-w-[200px] flex-1",
+                isOver ? "bg-blue-100" : "",
+                highlight ? "ring-2 ring-blue-400" : ""
+            ].join(" ")}
         >
             {children}
         </div>
