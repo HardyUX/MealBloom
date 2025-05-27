@@ -4,14 +4,20 @@ import { useTemplates } from '../context/TemplateContext';
 // Resusable components
 function DraggableMeal({ meal, onEdit, onDelete}) {
     const { saveTemplate } = useTemplates();
-    console.log('[DraggableMeal] meal prop:', meal);
     const [{ isDragging }, drag] = useMealDrag({ ...meal, fromDate: meal.date });
 
     return (
         <li
             ref={drag}
             style={{ opacity: isDragging ? 0.5 : 1}}
-            className="meal-item flex justify-between items-center mb-2 p-2 bg-gray-100 rounded-md"
+            className="
+                bg-gray-100
+                rounded-lg
+                border border-gray-200
+                p-2 mb-2
+                flex flex-col gap-2
+                min-h-[72px]
+                transition-opacity"
         >
             <div className="flex items-start gap-2">
                 <span className="text-xl" aria-hidden="true">
@@ -35,7 +41,6 @@ function DraggableMeal({ meal, onEdit, onDelete}) {
                 </button>
                 <button
                     onClick={() => {
-                            console.log('[DraggableMeal] Delete clicked', meal.id, meal.date);
                             onDelete(meal.id, meal.date)
                         }}
                     title="Delete"
@@ -46,7 +51,10 @@ function DraggableMeal({ meal, onEdit, onDelete}) {
                     </svg>
                 </button>
                 <button
-                    onClick={() => saveTemplate({ id: `template-${Date.now()}`, name: meal.mealName, mealType: meal.mealType })}
+                    onClick={() => saveTemplate({
+                                        id: `template-${Date.now()}`,
+                                        name: meal.mealName,
+                                        mealType: meal.mealType })}
                     title="Save as template"
                     className="text-yellow-500 hover: text-yellow-600"
                 >
