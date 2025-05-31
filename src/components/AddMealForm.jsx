@@ -13,11 +13,11 @@ export default function AddMealForm({ dateString, onAdd, onCancel }) {
     }
 
     return(
-        <form onSubmit={(e) => handleSubmit(e, dateString)} className="meal-form mt-1 sm:mt-2">
+        <form onSubmit={(e) => handleSubmit(e, dateString)} className="flex flex-col gap-2 bg-base-100 p-4 rounded-box shadow-md max-w-xs mx-auto mt-1 sm:mt-2">
             <select
                 value={mealType}
                 onChange={(e) => setMealType(e.target.value)}
-                className="meal-select"
+                className="select select-bordered w-full"
             >
                 <option>Breakfast</option>
                 <option>Lunch</option>
@@ -28,14 +28,15 @@ export default function AddMealForm({ dateString, onAdd, onCancel }) {
                 placeholder="Meal Name"
                 value={mealName}
                 onChange={(e) => setMealName(e.target.value)}
-                className="meal-input"
+                className="input input-bordered w-full"
             />
 
             {/* Save and Cancel Button */}
             <div className="flex gap-2">
                 <button
                     type="submit"
-                    className="text-white bg-green-500 hover:bg-green-600 px-3 py-2 rounded"
+                    className="btn btn-success"
+                    title="Save"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
@@ -43,7 +44,8 @@ export default function AddMealForm({ dateString, onAdd, onCancel }) {
                 </button>
                 <button
                     type="button"
-                    className="text-white bg-gray-500 hover:bg-gray-600 px-3 py-2 rounded"
+                    className="btn btn-ghost"
+                    title="Cancel"
                     onClick={onCancel}
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
