@@ -2,7 +2,6 @@
 import { useState, useMemo } from 'react';
 
 // Internal project files
-import './MealForm.css';
 import { toLocalDateKey } from '../utils/dateUtils';
 import MonthView from './MonthView';
 import { useCalendar } from '../context/CalendarContext';

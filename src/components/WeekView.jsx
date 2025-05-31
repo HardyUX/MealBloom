@@ -34,11 +34,11 @@ function WeekView({
                             onMealDrop={handleMealDrop}
                             highlight={isTodayFlag}
                             >
-                            <h3 className="meal-day-header text-lg font-bold mb-1 sm:mb-2">
+                            <h3 className="font-bold text-base-content mb-1 sm:mb-2">
                                 {formatDate(dateString)}
                             </h3>
 
-                            <ul className="meal-list">
+                            <ul className="flex flex-col gap-2 mb-2">
                                 {mealsOnThisDay.map((meal) => (
                                     <DraggableMeal
                                         key={meal.id}
@@ -71,7 +71,7 @@ function WeekView({
                                 <button
                                     onClick={() => setAddingMealDate(dateString)}
                                     title="Add Meal"
-                                    className="add-meal-btn mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+                                    className="btn btn-primary btn-sm"
                                 >
                                     
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -82,7 +82,7 @@ function WeekView({
                                 <button
                                     onClick={() => setActiveTemplateTargetDate(dateString)}
                                     title="Use Template"
-                                    className="use-template-btn mt-2 bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-2 rounded"
+                                    className="btn btn-warning btn-sm"
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
