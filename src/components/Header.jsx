@@ -18,34 +18,37 @@ export default function Header() {
     const { moveMeal } = useMeals()
 
     return (
-        <header className="bg-gray-100 py-2 shadow">
-            <div className="max-w-6xl mx-auto px-6 sm:px-8 flex items-center gap-10">
-            <img
-                src={logoSrc}
-                alt="MealBloom Logo"
-                className="w-24 h-24 flex-shrink-0"
-            />
-
-            {/* =================== Week Header & Navigation =================== */}
-            <h2 className="text-2xl font-bold mb-4">Scheduled Meals</h2>
-
-            <div className="flex gap-2 mb-6">
-                <button
-                    className={`px-4 py-2 rounded ${viewMode === 'week' ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
-                    onClick={() => setViewMode('week')}
-                >
-                    Week
-                </button>
-                <button
-                    className={`px-4 py-2 rounded ${viewMode === 'month' ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
-                    onClick={() => setViewMode('month')}
-                >
-                    Month
-                </button>
+        <header className="navbar bg-base-100 shadow mb-4 px-2 sm: px-6">
+            {/* Logo and App Title */}
+            <div className="navbar-start flex items-center gap-2">
+                <img
+                    src={logoSrc}
+                    alt="MealBloom Logo"
+                    className="w-20 h-20 sm:w-20 h-20"
+                />
+                <h1 className="text-2xl font-bold ml-2">MealBloom</h1>
             </div>
 
-            {/* Navigation between weeks */}
-            <div className="flex items-center justify-between mb-6 gap-4">
+            {/* Center: Navigation and Date Range */}
+            <div className="navbar-center flex flex-col items-center gap-1">
+                {/* View Mode Toggle */}
+                <div className="join mb-1">
+                    <button
+                        className={`btn btn-sm join-item ${viewMode === 'week' ? 'btn-primary' : 'btn-outline'}`}
+                        onClick={() => setViewMode('week')}
+                    >
+                        Week
+                    </button>
+                    <button
+                        className={`btn btn-sm join-item ${viewMode === 'month' ? 'btn-primary' : 'btn-outline'}`}
+                        onClick={() => setViewMode('month')}
+                    >
+                        Month
+                    </button>
+            </div>
+
+            {/* Date Range or Month Display */}
+            <div className="flex items-center gap-2">
                 {viewMode === 'week' ? (
                     <>
                         <DropTargetButton
@@ -62,14 +65,9 @@ export default function Header() {
                             </svg>
                         </DropTargetButton>
 
-                        {/* Mobile version (short) */}
-                        <h3 className="text-xl font-semibold block sm:hidden">
-                            {formatWeekRange(startDate, endDate, { includeYear: false })}
-                        </h3>
-
-                        {/* Desktop version (full) */}
-                        <h3 className="text-xl font-semibold hidden sm:block">
-                            {formatWeekRange(startDate, endDate, { includeYear: true })}
+                        <h3 className="text-xl font-semibold mx-2">
+                            <span className="hidden sm:inline">{formatWeekRange(startDate, endDate, { includeYear: true })}</span>
+                            <span className="sm:hidden">{formatWeekRange(startDate, endDate, { includeYear: false })}</span>
                         </h3>
                         
                         <DropTargetButton
@@ -91,7 +89,7 @@ export default function Header() {
                         <button
                             title="Previous"
                             onClick={goPrevious}
-                            className="px-4 py-2 bg-gray-200 hover: bg-gray-300 rounded"
+                            className="btn btn-sm btn-outline"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" />
@@ -99,14 +97,14 @@ export default function Header() {
                         </button>
 
                         
-                        <h3 className="text-xl font-semibold">
+                        <h3 className="text-xl font-semibold mx-2">
                             {calendarAnchorDate.toLocaleString('en-US', { month: 'long', year: 'numeric'})}
                         </h3>
 
                         <button
                             title="Next"
                             onClick={goNext}
-                            className="px-4 py-2 bg-gray-200 hover: bg-gray-300 rounded"
+                            className="btn btn-sm btn-outline"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
@@ -115,8 +113,10 @@ export default function Header() {
                     </>
                 )}
             </div>
-
         </div>
+
+        {/* Placeholder for navbar-end (future actions/user menu) */}
+        <div className="navbar-end"></div>
     </header>
         
     );
