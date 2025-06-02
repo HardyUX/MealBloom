@@ -1,5 +1,5 @@
 // src/components/WeekView.jsx
-
+import { useState } from 'react';
 import { formatDate, toLocalDateKey, generateWeekDays, isToday } from '../utils/dateUtils';
 import DropZone from './DropZone';
 import DraggableMeal from './DraggableMeal';
@@ -15,9 +15,9 @@ function WeekView({
     addMeal,
     addingMealDate,
     setAddingMealDate,
-    activeTemplateTargetDate,
-    setActiveTemplateTargetDate,
 }) {
+    const [templateModalDate, setTemplateModalDate] = useState(null);
+
     return (
         <div className="grid grid-cols-1 md:grid-cols-7 gap-2">
             {generateWeekDays(calendarAnchorDate).map((day) => {
@@ -80,7 +80,7 @@ function WeekView({
                                 </button>
 
                                 <button
-                                    onClick={() => setActiveTemplateTargetDate(dateString)}
+                                    onClick={() => setTemplateModalDate(dateString)}
                                     title="Use Template"
                                     className="btn btn-warning btn-sm"
                                 >
@@ -89,30 +89,40 @@ function WeekView({
                                     </svg>
                                 </button>
                             </div>
-                            
-                            {/* Template Picker */}
-                            {activeTemplateTargetDate === dateString && (
-                                <div className="mt-1 sm:mt-2">
-                                    <MealTemplateLibrary
-                                        onUseTemplate={(template) => {
-                                            const newMeal = {
-                                                id: Date.now(),
-                                                date: dateString,
-                                                mealType: template.mealType,
-                                                mealName: template.name,
-                                            };
-
-                                            addMeal(newMeal);
-
-                                            // Close the template picker after inserting
-                                            setActiveTemplateTargetDate(null);
-                                        }}
-                                    />
-                                </div>
-                            )}
                         </DropZone>
                 );
             })}
+                            {/* Template Picker */}
+                                {templateModalDate && (
+                                    <dialog id="template-modal" className="modal modal-open">
+                                        <div className="modal-box max-w-lg">
+                                            <form method="dialog">
+                                                <button
+                                                    className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                                                    onClick={() => setTemplateModalDate(null)}
+                                                    aria-label="Close"
+                                                >✕</button>
+                                            </form>
+                                            <MealTemplateLibrary
+                                                onUseTemplate={(template) => {
+                                                    addMeal ({
+                                                        id: Date.now(),
+                                                        date: templateModalDate,
+                                                        mealType: template.mealType,
+                                                        mealName: template.name,
+                                                    });
+
+                                                    setTemplateModalDate(null);
+                                                }}
+                                            />
+                                        </div>
+                                        {/* Modal overlay to close on click */}
+                                        <form method="dialog" className="modal-backdrop">
+                                            <button onClick={() => setTemplateModalDate(null)}>close</button>
+                                        </form>
+                                    </dialog>
+                                    
+                                )}
         </div>
     );
 }

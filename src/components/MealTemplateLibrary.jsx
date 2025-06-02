@@ -11,48 +11,50 @@ function MealTemplateLibrary({ onUseTemplate }) {
     };
 
     return (
-        <div className="border rounded shadow bg-white p-4 max-w-sm">
-            {/* Header */}
-            <h3 className="text-lg font-semibold mb-4">Meal Templates</h3>
+        <div className="card bg-base-100 shadow-md max-w-sm">
+            <div className="card-body">
+                {/* Header */}
+                <h2 className="card-title text-lg mb-2">Meal Templates</h2>
 
-            {/* If no templates saved yet */}
-            {templates.length === 0 ? (
-                <p className="text-gray-500 text-sm">No templates saved yet.</p>
-            ) : (
-                // Render template list
-                <ul className="space-y-2">
-                    {templates.map((template) => (
-                        <li key={template.id} className="flex justify-between items-center">
-                            <div>
-                                {/* Template name and meal type (e.g., Lunch) */}
-                                <span className="font-medium">{template.name}</span>
-                                <span className="text-sm text-gray-500 ml-2">({template.mealType})</span>
-                            </div>
+                {/* If no templates saved yet */}
+                {templates.length === 0 ? (
+                    <p className="text-base-content/60 text-sm">No templates saved yet.</p>
+                ) : (
+                    // Render template list
+                    <ul className="flex flex-col gap-2">
+                        {templates.map((template) => (
+                            <li key={template.id} className="flex justify-between items-center">
+                                <div>
+                                    {/* Template name and meal type (e.g., Lunch) */}
+                                    <span className="font-medium">{template.name}</span>
+                                    <span className="text-sm text-base-content/60 ml-2">({template.mealType})</span>
+                                </div>
 
-                            {/* Actions: Use and Delete */}
-                            <div className="flex items-center gap-2">
-                                {/* Delete icon button */}
+                                {/* Actions: Use and Delete */}
+                                <div className="flex gap-1">
+                                    {/* Delete icon button */}
+                                    <button
+                                        className="btn btn-error btn-xs"
+                                        aria-label={`Delete template ${template.name}`}
+                                        onClick={() => deleteTemplate(template.id)}
+                                    >
+                                        <Trash2 size={16} className="text-red-600 hover:text-red-800" />
+                                    </button>
+
+                                </div>
+
+                                {/* Use button */}
                                 <button
-                                    className="delete-template p-1 rounded hover:bg-red-100"
-                                    aria-label={`Delete template ${template.name}`}
-                                    onClick={() => deleteTemplate(template.id)}
+                                    className="btn btn-outline btn-xs"
+                                    onClick={() => handleUse(template)}
                                 >
-                                    <Trash2 size={16} className="text-red-600 hover:text-red-800" />
+                                    <Play size={14} className="mr-1" /> Use
                                 </button>
-
-                            </div>
-
-                            {/* Use button */}
-                            <button
-                                className="text-blue-600 hover:text-blue-800 text-sm"
-                                onClick={() => handleUse(template)}
-                            >
-                                <Play size={14} className="mr-1" /> Use
-                            </button>
-                        </li>
-                    ))}
-                </ul>
-            )}
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </div>
         </div>
     );
 }

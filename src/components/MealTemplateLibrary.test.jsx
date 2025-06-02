@@ -32,9 +32,7 @@ describe('MealTemplateLibrary', () => {
 
         // Find and click the delete button next to "Pasta"
         const pastaDeleteBtn = screen
-            .getByText('Pasta')
-            .closest('li')
-            .querySelector('button.delete-template');
+            .getByLabelText('Delete template Pasta')
         fireEvent.click(pastaDeleteBtn);
 
         // "Pasta" should be gone, but "Omelette" remains
