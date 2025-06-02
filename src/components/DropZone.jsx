@@ -7,10 +7,10 @@ function DropZone({ dateString, children, onMealDrop, highlight }) {
         <div
             ref={drop}
             className={[
-                "bg-white border border-gray-200 rounded-lg p-4 mb-6",
-                "min-w-[160px] md:min-w-[200px] flex-1",
-                isOver ? "bg-blue-100" : "",
-                highlight ? "ring-2 ring-blue-400" : ""
+                "card bg-base-100 shadow-md border border-base-200 p-4 mb-6",
+                "min-w-[160px] md:min-w-[200px] flex-1 transition-colors",
+                isOver ? "bg-primary/10 ring-2 ring-primary" : "",
+                highlight ? "ring-2 ring-accent" : ""
             ].join(" ")}
         >
             {children}
