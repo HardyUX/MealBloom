@@ -11,16 +11,17 @@ function DraggableMiniMeal({ meal }) {
     return (
         <div
             ref={drag}
-            className="text-xs truncate cursor-move"
+            className={`text-xs w-full truncate cursor-move ${isDragging ? 'opacity-50' : ''}`}
             data-testid="DraggableMiniMeal"
-            style={{ opacity: isDragging ? 0.5 : 1 }}
             title={meal.mealName}
         >
-            {meal.mealType === 'Breakfast'
-                ? '🥐'
-                : meal.mealType === 'Lunch'
-                ? '🥪'
-                : '🍝'}{' '}
+            <span>
+                {meal.mealType === 'Breakfast'
+                    ? '🥐'
+                    : meal.mealType === 'Lunch'
+                    ? '🥪'
+                    : '🍝'}
+            </span>{' '}
             {meal.mealName}
         </div>
     );
