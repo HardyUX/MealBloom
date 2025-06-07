@@ -7,7 +7,7 @@ function DropZone({ dateString, children, onMealDrop, highlight }) {
         <div
             ref={drop}
             className={[
-                "card bg-base-100 shadow-md border border-base-200 p-4 mb-6",
+                "card bg-base-100 shadow-md border border-base-200 p-4 mb-6 relative",
                 "min-w-[160px] md:min-w-[200px] flex-1 transition-colors",
                 isOver ? "bg-primary/10 ring-2 ring-primary" : "",
                 highlight ? "ring-2 ring-accent" : ""

@@ -5,6 +5,7 @@ import DropZone from './DropZone';
 import DraggableMeal from './DraggableMeal';
 import AddMealForm from './AddMealForm';
 import MealTemplateLibrary from './MealTemplateLibrary';
+import AddCreateMealModal from './AddCreateMealModal';
 
 function WeekView({
     calendarAnchorDate,
@@ -17,6 +18,7 @@ function WeekView({
     setAddingMealDate,
 }) {
     const [templateModalDate, setTemplateModalDate] = useState(null);
+    const [addModalDate, setAddModalDate] = useState(null);
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-7 gap-2">
@@ -37,6 +39,21 @@ function WeekView({
                             <h3 className="font-bold text-base-content mb-1 sm:mb-2">
                                 {formatDate(dateString)}
                             </h3>
+
+                            {/* Add Meal Button */}
+                            <div className="flex justify-end mt-2">
+                                <button
+                                    onClick={() => setAddModalDate(dateString)}
+                                    title="Add Meal"
+                                    aria-label="Add Meal"
+                                    className="btn btn-primary btn-sm absolute right-4 top-3 z-10"
+                                >
+                                    
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                    </svg>
+                                </button>
+                            </div>
 
                             <ul className="flex flex-col gap-2 mb-2">
                                 {mealsOnThisDay.map((meal) => (
@@ -65,30 +82,6 @@ function WeekView({
                                     onCancel={() => setAddingMealDate(null)}
                                 />
                             )}
-
-                            {/* Buttons: Add Meal + Use Template */}
-                            <div className="flex gap-2 mt-1 sm:mt-2">
-                                <button
-                                    onClick={() => setAddingMealDate(dateString)}
-                                    title="Add Meal"
-                                    className="btn btn-primary btn-sm"
-                                >
-                                    
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                    </svg>
-                                </button>
-
-                                <button
-                                    onClick={() => setTemplateModalDate(dateString)}
-                                    title="Use Template"
-                                    className="btn btn-warning btn-sm"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                                    </svg>
-                                </button>
-                            </div>
                         </DropZone>
                 );
             })}
@@ -123,6 +116,12 @@ function WeekView({
                                     </dialog>
                                     
                                 )}
+            <AddCreateMealModal
+                dateString={addModalDate}
+                isOpen={!!addModalDate}
+                onClose={() => setAddModalDate(null)}
+                onAddMeal={addMeal}
+            />
         </div>
     );
 }
