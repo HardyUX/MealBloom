@@ -4,17 +4,18 @@ A sleek and simple React-based meal planning app that helps users organize meals
 
 ## Features
 
-- View meals scheduled for each day of the week
+- View meals scheduled for each day of the week and month
 - Add, edit, or remove meals
+- Add or remove favorite meals
 - Drag and drop meals to reschedule across days
-- Navigate between weeks with intuitive controls
+- Navigate between weeks and months with intuitive controls
 - Local storage support (data stays on your device)
-- Clean, responsive UI using Tailwind CSS
+- Clean, responsive UI using Tailwind CSS + DaisyUI
 
 ## Tech Stack
 
 - React
-- Tailwind CSS
+- Tailwind CSS + DaisyUI (UI)
 - React DnD (drag-and-drop)
 - Vite (for fast dev build)
 - Local Storage API
@@ -29,7 +30,6 @@ npm run dev
 ## ✨ Future Improvements
 
 - User accounts and sync
-- Calendar view
 - Mobile optimization
 - Recipe integration
 - Shopping list integration
