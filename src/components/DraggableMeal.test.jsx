@@ -11,7 +11,9 @@ jest.mock('react-dnd', () => ({
 const mockSaveTemplate = jest.fn();
 jest.mock('../context/TemplateContext', () => ({
     useTemplates: () => ({
-        saveTemplate: mockSaveTemplate
+        templates: [],
+        saveTemplate: mockSaveTemplate,
+        deleteTemplate: jest.fn(),
     })
 }));
 
@@ -19,25 +21,16 @@ describe('DraggableMeal', () => {
     const meal = { id: 'm1', mealName: 'Spaghetti', mealType: 'Dinner' };
     const noop = () => {};
 
-    beforeAll(() => {
-        // Freeze Date.now for deterministic ID
-        jest.spyOn(Date, 'now').mockReturnValue(123456);
-    });
-
-    afterAll(() => {
-        jest.restoreAllMocks();
-    });
-
-    it('calls saveTemplate with the correct payload when ⭐ is clicked', () => {
-        const { getByTitle } = render(
+    it('calls saveTemplate with the correct payload when heart icon is clicked', () => {
+        const { getByLabelText } = render(
             <DraggableMeal meal={meal} onEdit={noop} onDelete={noop} />
         );
 
-        const btn = getByTitle('Save as template');
+        const btn = getByLabelText('Add to favorites');
         fireEvent.click(btn);
 
         expect(mockSaveTemplate).toHaveBeenCalledWith({
-            id: 'template-123456',
+            id: 'template-Dinner-Spaghetti',
             name: 'Spaghetti',
             mealType: 'Dinner'
         });

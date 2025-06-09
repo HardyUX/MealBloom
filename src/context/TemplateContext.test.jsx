@@ -28,7 +28,7 @@ function DeleteTestConsumer({ onReady }) {
     // On mount: add then remove the template
     useEffect(() => {
         saveTemplate({ id: 't1', name: 'Pasta', mealType: 'Dinner' });
-        deleteTemplate('t1');
+        deleteTemplate('Pasta', 'Dinner');
     }, []);
 
     // Notify when templates change

@@ -16,12 +16,18 @@ export function TemplateProvider({ children }) {
 
     // Create a new template
     const saveTemplate = (template) => {
-        setTemplates((t) => [...t, template]);
+        setTemplates((t) => {
+            const exists = t.some(tp => tp.name === template.name && tp.mealType === template.mealType);
+            if (!exists) {
+                return [...t, template];
+            }
+            return t;
+        });
     };
 
-    // Delete a template by id
-    const deleteTemplate = (id) => {
-        setTemplates((t) => t.filter((tpl) => tpl.id !== id));
+    // Delete a template by name & type
+    const deleteTemplate = (name, mealType) => {
+        setTemplates((t) => t.filter(tp => !(tp.name === name && tp.mealType === mealType)));
     };
 
     return (

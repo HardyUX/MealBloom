@@ -1,5 +1,4 @@
 // src/components/DraggableMeal.jsx
-import { useState } from 'react';
 import { useMealDrag } from '../hooks/useMealDrag';
 import { useTemplates } from '../context/TemplateContext';
 import FavoriteButton from './FavoriteButton';
@@ -12,21 +11,18 @@ function DraggableMeal({ meal, onEdit, onDelete}) {
 
     // Favorite status logic: checks if this meal exists in templates
     const isFavorited = templates.some(
-        (t) => t.mealName === meal.mealName && t.mealType === meal.mealType
+        (t) => t.name === meal.mealName && t.mealType === meal.mealType
     );
 
     function handleToggleFavorite() {
         if (!isFavorited) {
             saveTemplate({
-                id: `template-${Date.now()}`,
+                id: `template-${meal.mealType}-${meal.mealName}`,
                 name: meal.mealName,
                 mealType: meal.mealType,
             });
         } else {
-            const template = templates.find(
-                (t) => t.mealName === meal.mealName && t.mealType === meal.mealType
-            );
-            if (template) deleteTemplate(template.id);
+            deleteTemplate(meal.mealName, meal.mealType);
         }
     }
 
@@ -36,7 +32,7 @@ function DraggableMeal({ meal, onEdit, onDelete}) {
             style={{ opacity: isDragging ? 0.5 : 1}}
             className="
                 relative
-                bg-base-100
+                bg-base-200
                 rounded-box
                 border border-base-200
                 p-3 mb-2

@@ -1,10 +1,27 @@
 // src/components/KebabMenu.jsx
-import { useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { MoreVertical } from 'lucide-react';
 
 export default function KebabMenu({ onEdit, onDelete }) {
     const [menuOpen, setMenuOpen] = useState(false);
+    const menuRef = useRef();
     
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setMenuOpen(false);
+            }
+        }
+        if (menuOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        } else {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [menuOpen]);
+
     function toggleMenu(e) {
         e.stopPropagation();
         setMenuOpen((open) => !open);
@@ -22,7 +39,8 @@ export default function KebabMenu({ onEdit, onDelete }) {
 
     return (
         <div
-            className={`absolute top-2 left-2 z-20 ${
+            ref={menuRef}
+            className={`absolute top-9 right-2 z-20 ${
                 menuOpen ? '' : 'opacity-0 group-hover:opacity-100 transition-opacity'
             }`}
         >

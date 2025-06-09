@@ -36,7 +36,7 @@ function MealTemplateLibrary({ onUseTemplate }) {
                                     <button
                                         className="btn btn-error btn-xs"
                                         aria-label={`Delete template ${template.name}`}
-                                        onClick={() => deleteTemplate(template.id)}
+                                        onClick={() => deleteTemplate(template.name, template.mealType)}
                                     >
                                         <Trash2 size={16} className="text-red-600 hover:text-red-800" />
                                     </button>
