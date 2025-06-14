@@ -18,7 +18,7 @@ export default function Header() {
     const { moveMeal } = useMeals()
 
     return (
-        <header className="navbar bg-base-100 shadow mb-4 px-2 sm: px-6">
+        <header className="navbar bg-cozy mb-4 px-2 sm: px-6">
             {/* Logo and App Title */}
             <div className="navbar-start flex items-center gap-2">
                 <img
@@ -34,13 +34,17 @@ export default function Header() {
                 {/* View Mode Toggle */}
                 <div className="join mb-1">
                     <button
-                        className={`btn btn-sm join-item ${viewMode === 'week' ? 'btn-primary' : 'btn-outline'}`}
+                        className={`btn btn-sm join-item ${viewMode === 'week' 
+                            ? 'bg-cozy-blue text-gray-900 hover:bg-cozy-dark'
+                            : 'bg-white text-gray-600 border border-cozy-accent hover:bg-cozy-blue/20'}`}
                         onClick={() => setViewMode('week')}
                     >
                         Week
                     </button>
                     <button
-                        className={`btn btn-sm join-item ${viewMode === 'month' ? 'btn-primary' : 'btn-outline'}`}
+                        className={`btn btn-sm join-item ${viewMode === 'month' 
+                            ? 'bg-cozy-blue text-gray-900 hover:bg-cozy-dark'
+                            : 'bg-white text-gray-600 border border-cozy-accent hover:bg-cozy-blue/20'}`}
                         onClick={() => setViewMode('month')}
                     >
                         Month

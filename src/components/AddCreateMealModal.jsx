@@ -24,7 +24,7 @@ export default function AddCreateMealModal({ dateString, isOpen, onClose, onAddM
                     <div className="flex flex-col items-center gap-4">
                         <h2 className="text-lg font-bold mb-2">Add a Meal</h2>
                         <button
-                            className="btn btn-primary btn-lg w-full flex items-center gap-2"
+                            className="btn bg-cozy-blue text-gray-900 hover:bg-cozy-dark btn-lg w-full flex items-center gap-2"
                             onClick={() => setStep('add')}
                             aria-label="Add a blank meal"
                         >

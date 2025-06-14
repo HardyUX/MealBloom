@@ -71,7 +71,7 @@ export default function DropTargetButton({ direction, children}) {
             <button
                 ref={drop}
                 onClick={handleClick}
-                className={`btn btn-primary btn-sm text-gray-900 rounded-lg px-3 py-1 transition-transform duration-200
+                className={`btn btn-sm text-gray-900 rounded-lg px-3 py-1 transition-transform duration-200
                     ${direction === 'next' ? 'ml-3' : ''}
                     ${isOver ? 'bg-blue-300 scale-105' : 'bg-gray-200 hover:bg-gray-300'}
                     ${isOver ? (direction === 'next' ? 'animate-wiggle-right' : 'animate-wiggle-left') : ''}

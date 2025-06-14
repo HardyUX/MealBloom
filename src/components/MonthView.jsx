@@ -32,7 +32,7 @@ function MonthView({ meals, onMealDrop }) {
     }
 
     return (
-        <div>
+        <div className="bg-cozy min-h-[calc(100vh-80px)] p-2">
             <div className="grid grid-cols-7 gap-px sm:gap-2 text-center font-semibold mb-1 sm:mb-2">
                 {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
                     <div key={day}>{day}</div>
@@ -41,12 +41,13 @@ function MonthView({ meals, onMealDrop }) {
 
             <div className="grid grid-cols-7 gap-px sm:gap-2">
                 {days.map((day, i) => (
-                    <DayCell
-                        key={i}
-                        day={day}
-                        meals={meals}
-                        onMealDrop={onMealDrop}
-                    />
+                    <div key={i} className="rounded-lg shadow-sm min-h-[80px]">
+                        <DayCell
+                            day={day}
+                            meals={meals}
+                            onMealDrop={onMealDrop}
+                        />
+                    </div>
                 ))}
             </div>
         </div>

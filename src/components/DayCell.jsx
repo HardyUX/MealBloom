@@ -16,8 +16,8 @@ export default function DayCell({ day, meals, onMealDrop }) {
         : [];
     
     // Highlighting logic
-    let cellClass = "min-h-[60px] sm:min-h-[80px] rounded-lg p-1 border border-base-200 bg-base-100";
-    if (!day) cellClass = "bg-base-200"; // padding cell
+    let cellClass = "min-h-[60px] sm:min-h-[80px] rounded-lg p-1 border border-cozy bg-cozy-card";
+    if (!day) cellClass = "bg-cozy"; // padding cell
     if (day && isToday(day)) cellClass += " ring-2 ring-primary"; // highlight today
     if (day && isWeekend(day)) cellClass += " bg-accent/10"; // shade weekends (subtle)
 

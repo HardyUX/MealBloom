@@ -5,13 +5,16 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                pastelPink: '#FFF4FC',
-                purple: '#EAACFF',
-                green: '#8EFF88',
-                red: '#F96956',
-                pastelRed: '#FF6C6C',
-                pastelYellow: '#FFFA77',
-                gray: '#D9D9D9',
+                cozy: {
+                    DEFAULT: '#faf3f0',    // primary bg
+                    card:   '#F9F9F9',     // card/inner surface
+                    accent: '#F5F5DC',     // accent, e.g. beige
+                    blue: '#a8d8ea',     // buttons
+                    dark: '#6bb7e3', // buttons on hover
+                    yellow: '#FAFAD2',     // for positive or highlight
+                    mint:   '#E0F2F1',     // secondary, e.g. selected or notification
+                },
+                
             },
             fontSize: {
                 'lg' : '18px',

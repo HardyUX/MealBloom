@@ -8,18 +8,21 @@ import MealForm from './components/MealForm';
 
 function App() {
   return(
-    <DndProvider backend={HTML5Backend}>
-      <CalendarProvider>
-        <TemplateProvider>
-          <MealProvider>
-            <>
-              <Header />
-              <MealForm />
-            </>
-          </MealProvider>
-        </TemplateProvider>
-      </CalendarProvider>
-    </DndProvider>
+    <div className="min-h-screen bg-cozy">
+      <DndProvider backend={HTML5Backend}>
+        <CalendarProvider>
+          <TemplateProvider>
+            <MealProvider>
+              <>
+                <Header />
+                <MealForm />
+              </>
+            </MealProvider>
+          </TemplateProvider>
+        </CalendarProvider>
+      </DndProvider>
+    </div>
+
   ); 
 }
 

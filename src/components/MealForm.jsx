@@ -61,7 +61,6 @@ function MealForm() {
 
     return (
 
-        <div className="min-h-screen bg-gray-100">
             <div className="w-full max-w-[1680px] mx-auto py-4">
                 <div className="overflow-x-auto">
 
@@ -104,7 +103,6 @@ function MealForm() {
                 )}
                 </div>
             </div>
-        </div>  
     );
 
 
