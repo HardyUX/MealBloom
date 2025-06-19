@@ -20,13 +20,13 @@ export default function Header() {
     return (
         <header className="navbar bg-cozy mb-4 px-2 sm: px-6">
             {/* Logo and App Title */}
-            <div className="navbar-start flex items-center gap-2">
+            <div className="navbar-start flex items-center gap-2 px-2">
                 <img
                     src={logoSrc}
                     alt="MealBloom Logo"
                     className="w-20 h-20 sm:w-20 h-20"
                 />
-                <h1 className="text-2xl font-bold ml-2">MealBloom</h1>
+                <h1 className="text-4xl ml-2 font-logo">MealBloom</h1>
             </div>
 
             {/* Center: Navigation and Date Range */}

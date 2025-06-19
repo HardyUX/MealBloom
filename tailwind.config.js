@@ -33,6 +33,10 @@ module.exports = {
                 'wiggle-right': 'wiggleRight 0.3s ease-in-out',
                 'wiggle-left': 'wiggleLeft 0.3s ease-in-out',
             },
+
+            fontFamily: {
+                logo: ['"Meow Script"', 'cursive'],
+            }
         },
     },
     plugins: [],
