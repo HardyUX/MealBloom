@@ -1,6 +1,6 @@
 // src/components/WeekView.jsx
 import { useState } from 'react';
-import { formatDate, toLocalDateKey, generateWeekDays, isToday } from '../utils/dateUtils';
+import { formatShortWeekday, formatMonthDay, toLocalDateKey, generateWeekDays, isToday } from '../utils/dateUtils';
 import DropZone from './DropZone';
 import DraggableMeal from './DraggableMeal';
 import AddMealForm from './AddMealForm';
@@ -37,8 +37,12 @@ function WeekView({
                                 onMealDrop={handleMealDrop}
                                 highlight={isTodayFlag}
                                 >
-                                <h3 className="font-bold text-base-content mb-1 sm:mb-2">
-                                    {formatDate(dateString)}
+                                <h3
+                                    className="mb-1 sm:mb-2 flex flex-col items-center leading-tight"
+                                    aria-label={`${day.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric'})}`}
+                                >
+                                    <span className="text-lg font-bold">{formatShortWeekday(day)}</span>
+                                    <span className="text-xs text-base-content/60">{formatMonthDay(day)}</span>
                                 </h3>
 
                                 {/* Add Meal Button */}

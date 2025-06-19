@@ -34,7 +34,7 @@ function MonthView({ meals, onMealDrop }) {
     return (
         <div className="bg-cozy min-h-[calc(100vh-80px)] p-2">
             <div className="grid grid-cols-7 gap-px sm:gap-2 text-center font-semibold mb-1 sm:mb-2">
-                {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
+                {['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'].map(day => (
                     <div key={day}>{day}</div>
                 ))}
             </div>

@@ -16,6 +16,7 @@ export default function Header() {
         anchorDate: calendarAnchorDate
     } = useCalendar();
     const { moveMeal } = useMeals()
+    const [main, year] = formatWeekRange(startDate, endDate, { includeYear: true }).split(', ')
 
     return (
         <header className="navbar bg-cozy mb-4 px-2 sm: px-6">
@@ -69,8 +70,12 @@ export default function Header() {
                             </svg>
                         </DropTargetButton>
 
-                        <h3 className="text-xl font-semibold mx-2">
-                            <span className="hidden sm:inline">{formatWeekRange(startDate, endDate, { includeYear: true })}</span>
+                        <h3 className="text-xl font-semibold mx-4 text-center">
+                            <span className="hidden sm:inline">
+                                {main}
+                                <br />
+                                <span className="text-xs font-light text-base-content/60">{year}</span>
+                            </span>
                             <span className="sm:hidden">{formatWeekRange(startDate, endDate, { includeYear: false })}</span>
                         </h3>
                         

@@ -91,3 +91,11 @@ export function isWeekend(date) {
     // 0 = Sunday, 6 = Saturday
     return day === 0 || day === 6;
 }
+
+export function formatShortWeekday(date) {
+    return date.toLocaleDateString('en-US', { weekday: 'short' }).slice(0, 2);
+}
+
+export function formatMonthDay(date) {
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
