@@ -1,14 +1,19 @@
 // src/components/KebabMenu.jsx
+import { createPortal } from 'react-dom';
 import { useEffect, useState, useRef } from 'react';
 import { MoreVertical } from 'lucide-react';
 
 export default function KebabMenu({ onEdit, onDelete }) {
     const [menuOpen, setMenuOpen] = useState(false);
-    const menuRef = useRef();
+    const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
+    const kebabButtonRef = useRef();
     
     useEffect(() => {
         function handleClickOutside(event) {
-            if (menuRef.current && !menuRef.current.contains(event.target)) {
+            if (
+                kebabButtonRef.current &&
+                !kebabButtonRef.current.contains(event.target)
+            ) {
                 setMenuOpen(false);
             }
         }
@@ -20,6 +25,16 @@ export default function KebabMenu({ onEdit, onDelete }) {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
+    }, [menuOpen]);
+
+    useEffect(() => {
+        if (menuOpen && kebabButtonRef.current) {
+            const rect = kebabButtonRef.current.getBoundingClientRect();
+            setMenuPosition({
+                top: rect.bottom + window.scrollY,
+                left: rect.left + window.scrollX
+            });
+        }
     }, [menuOpen]);
 
     function toggleMenu(e) {
@@ -39,23 +54,25 @@ export default function KebabMenu({ onEdit, onDelete }) {
 
     return (
         <div
-            ref={menuRef}
-            className={`absolute top-9 right-2 z-20 ${
-                menuOpen ? '' : 'opacity-0 group-hover:opacity-100 transition-opacity'
-            }`}
+            className="absolute top-9 right-2 z-20"
         >
             <button
                 className="btn btn-ghost btn-xs"
                 aria-label="Show actions"
                 onClick={toggleMenu}
                 tabIndex={0}
+                ref={kebabButtonRef}
             >
                 <MoreVertical size={16} />
             </button>
-            {menuOpen && (
+            {menuOpen && createPortal (
                 <ul
-                    className="menu menu-sm dropdown-content mt-1 p-2 shadow bg-base-100 rounded-box z-30"
-                    style={{ position: 'absolute', left: 0, top: '100%' }}
+                    className="menu menu-sm dropdown-content mt-1 p-2 shadow bg-base-100 rounded-box z-[9999]"
+                    style={{ 
+                        position: 'absolute',
+                        top: `${menuPosition.top}px`,
+                        left: `${menuPosition.left}px`
+                     }}
                     onKeyDown={handleKeyDown}
                 >
                     <li>
@@ -71,7 +88,8 @@ export default function KebabMenu({ onEdit, onDelete }) {
                             Delete
                         </button>
                     </li>
-                </ul>
+                </ul>,
+                document.body
             )}
         </div>
     );
