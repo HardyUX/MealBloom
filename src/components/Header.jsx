@@ -1,5 +1,6 @@
 // src/components/Header.jsx
 import logoSrc from '../assets/MealBloom_Logo-transparent.png';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useCalendar } from '../context/CalendarContext';
 import { formatWeekRange } from '../utils/dateUtils';
 import DropTargetButton from './DropTargetButton';
@@ -31,7 +32,7 @@ export default function Header() {
             </div>
 
             {/* Center: Navigation and Date Range */}
-            <div className="navbar-center flex flex-col items-center gap-1">
+            <div className="navbar-center flex flex-col items-center gap-2">
                 {/* View Mode Toggle */}
                 <div className="join mb-1">
                     <button
@@ -64,13 +65,12 @@ export default function Header() {
                                 moveMeal(meal, fromKey, toKey)
                                 goPrevious()
                             }}
+                            className="btn btn-sm"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" />
-                            </svg>
+                            <ChevronLeft size={20} />
                         </DropTargetButton>
 
-                        <h3 className="text-xl font-semibold mx-4 text-center">
+                        <h3 className="text-xl font-semibold mx-4 text-center leading-tight">
                             <span className="hidden sm:inline">
                                 {main}
                                 <br />
@@ -87,10 +87,9 @@ export default function Header() {
                                 moveMeal(meal, fromKey, toKey)
                                 goNext()
                             }}
+                            className="btn btn-sm"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                            </svg>
+                            <ChevronRight size={20} />
                         </DropTargetButton>
                     </>
                 ) : (
@@ -98,26 +97,23 @@ export default function Header() {
                         <button
                             title="Previous"
                             onClick={goPrevious}
-                            className="btn btn-sm btn-outline"
+                            className="btn btn-sm bg-gray-200 hover:bg-gray-300"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" />
-                            </svg>
+                            <ChevronLeft size={20} />
                         </button>
 
-                        
-                        <h3 className="text-xl font-semibold mx-2">
-                            {calendarAnchorDate.toLocaleString('en-US', { month: 'long', year: 'numeric'})}
+                        <h3 className="text-xl font-semibold mx-4 text-center leading-tight">
+                            <span>{calendarAnchorDate.toLocaleString('en-US', { month: 'long' })}</span>
+                            <br />
+                            <span className="text-xs font-light text-base-content/60">{calendarAnchorDate.getFullYear()}</span>
                         </h3>
 
                         <button
                             title="Next"
                             onClick={goNext}
-                            className="btn btn-sm btn-outline"
+                            className="btn btn-sm bg-gray-200 hover:bg-gray-300"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                            </svg>
+                            <ChevronRight size={20} />
                         </button>
                     </>
                 )}

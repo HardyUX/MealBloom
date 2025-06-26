@@ -10,9 +10,10 @@ import { useCalendar } from '../context/CalendarContext';
  * 
  * Props:
  *  - direction: 'previous' | 'next'
+ *  - className: CSS classes for the button
  *  - children: your arrow icon or text
  */
-export default function DropTargetButton({ direction, children}) {
+export default function DropTargetButton({ direction, children, className=''}) {
     const { moveMeal } = useMeals();
     const { goPrevious, goNext } = useCalendar();
     const timeoutRef = useRef(null);
@@ -71,7 +72,7 @@ export default function DropTargetButton({ direction, children}) {
             <button
                 ref={drop}
                 onClick={handleClick}
-                className={`btn btn-sm text-gray-900 rounded-lg px-3 py-1 transition-transform duration-200
+                className={`${className} transition-transform duration-200
                     ${direction === 'next' ? 'ml-3' : ''}
                     ${isOver ? 'bg-blue-300 scale-105' : 'bg-gray-200 hover:bg-gray-300'}
                     ${isOver ? (direction === 'next' ? 'animate-wiggle-right' : 'animate-wiggle-left') : ''}

@@ -1,5 +1,6 @@
 // src/components/WeekView.jsx
 import { useState } from 'react';
+import { Plus } from 'lucide-react';
 import { formatShortWeekday, formatMonthDay, toLocalDateKey, generateWeekDays, isToday } from '../utils/dateUtils';
 import DropZone from './DropZone';
 import DraggableMeal from './DraggableMeal';
@@ -53,10 +54,7 @@ function WeekView({
                                         aria-label="Add Meal"
                                         className="btn btn-sm absolute right-4 top-3 z-10 bg-cozy-blue text-gray-900 hover:bg-cozy-dark"
                                     >
-                                        
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                        </svg>
+                                        <Plus size={20} />
                                     </button>
                                 </div>
 
