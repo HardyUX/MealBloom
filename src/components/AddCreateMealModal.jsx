@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Plus, Folder } from 'lucide-react';
 import AddMealForm from './AddMealForm';
 import MealTemplateLibrary from './MealTemplateLibrary';
 
@@ -28,7 +29,7 @@ export default function AddCreateMealModal({ dateString, isOpen, onClose, onAddM
                             onClick={() => setStep('add')}
                             aria-label="Add a blank meal"
                         >
-                            <span className="text-xl">+</span>
+                            <Plus />
                             <span>Add Blank Meal</span>
                         </button>
                         <button
@@ -36,7 +37,7 @@ export default function AddCreateMealModal({ dateString, isOpen, onClose, onAddM
                             onClick={() => setStep('template')}
                             aria-label="Add meal from template"
                         >
-                            <span className="text-xl">🗂️</span>
+                            <Folder />
                             <span>Use Template</span>
                         </button>
                     </div>
