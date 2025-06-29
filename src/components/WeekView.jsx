@@ -15,10 +15,7 @@ function WeekView({
     handleEdit,
     handleDelete,
     addMeal,
-    addingMealDate,
-    setAddingMealDate,
 }) {
-    const [templateModalDate, setTemplateModalDate] = useState(null);
     const [addModalDate, setAddModalDate] = useState(null);
 
     return (
@@ -68,57 +65,10 @@ function WeekView({
                                         />   
                                     ))}
                                 </ul>
-
-                                {/* Add Meal Form */}
-                                {addingMealDate === dateString && (
-                                    <AddMealForm
-                                        dateString={dateString}
-                                        onAdd={({ mealType, mealName }) => {
-                                            addMeal({
-                                                id: Date.now(),
-                                                date: dateString,
-                                                mealType,
-                                                mealName,
-                                            });
-                                            setAddingMealDate(null);
-                                        }}
-                                        onCancel={() => setAddingMealDate(null)}
-                                    />
-                                )}
                             </DropZone>
                     );
                 })}
-                                {/* Template Picker */}
-                                    {templateModalDate && (
-                                        <dialog id="template-modal" className="modal modal-open">
-                                            <div className="modal-box max-w-lg">
-                                                <form method="dialog">
-                                                    <button
-                                                        className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-                                                        onClick={() => setTemplateModalDate(null)}
-                                                        aria-label="Close"
-                                                    >✕</button>
-                                                </form>
-                                                <MealTemplateLibrary
-                                                    onUseTemplate={(template) => {
-                                                        addMeal ({
-                                                            id: Date.now(),
-                                                            date: templateModalDate,
-                                                            mealType: template.mealType,
-                                                            mealName: template.name,
-                                                        });
 
-                                                        setTemplateModalDate(null);
-                                                    }}
-                                                />
-                                            </div>
-                                            {/* Modal overlay to close on click */}
-                                            <form method="dialog" className="modal-backdrop">
-                                                <button onClick={() => setTemplateModalDate(null)}>close</button>
-                                            </form>
-                                        </dialog>
-                                        
-                                    )}
                 <AddCreateMealModal
                     dateString={addModalDate}
                     isOpen={!!addModalDate}
