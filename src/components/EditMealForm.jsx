@@ -1,15 +1,6 @@
 // EditMealForm.jsx
 import { useState, useEffect } from 'react';
-
-/**
- * Prevent XSS attacks by stripping HTML/XML tags
- * @param {string} dirtyInput - Raw string from input field
- * @returns {string} Sanitized, plain-text string
- */
-function sanitize(dirtyInput) {
-    const doc = new DOMParser().parseFromString(dirtyInput, 'text/html');
-    return doc.body.textContent || "";
-}
+import DOMPurify from 'dompurify';
 
 export default function EditMealForm({ meal, onUpdate, onCancel }) {
     const [date, setDate] = useState(meal.date);
@@ -31,7 +22,7 @@ export default function EditMealForm({ meal, onUpdate, onCancel }) {
         e.preventDefault();
 
         // Sanitize and validate all relevant fields
-        const sanitizedName = sanitize(mealName.trim());
+        const sanitizedName = DOMPurify.sanitize(mealName.trim());
         const validationErrors = {};
 
         if (!sanitizedName) {

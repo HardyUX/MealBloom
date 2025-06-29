@@ -1,15 +1,6 @@
 // AddMealForm.jsx
 import { useState } from 'react';
-
-/**
- * Prevent XSS attacks by stripping HTML/XML tags
- * @param {string} dirtyInput - Raw string from input field
- * @returns {string} Sanitized, plain-text string
- */
-function sanitize(dirtyInput) {
-    const doc = new DOMParser().parseFromString(dirtyInput, 'text/html');
-    return doc.body.textContent || "";
-}
+import DOMPurify from 'dompurify';
 
 export default function AddMealForm({ dateString, onAdd, onCancel }) {
     const [mealType, setMealType] = useState('Breakfast');
@@ -20,14 +11,14 @@ export default function AddMealForm({ dateString, onAdd, onCancel }) {
         e.preventDefault();
 
         // Sanitize and validate input
-        const sanitizedName = sanitize(mealName.trim());
+        const sanitizedName = DOMPurify.sanitize(mealName.trim());
 
         if (!sanitizedName) {
             setError('Meal name cannot be empty.');
             return;
         }
 
-        onAdd({ mealType, mealName: mealName.trim() });
+        onAdd({ mealType, mealName: sanitizedName });
 
         setMealName('');
         setMealType('Breakfast');
