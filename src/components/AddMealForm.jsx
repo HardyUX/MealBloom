@@ -1,15 +1,37 @@
 // AddMealForm.jsx
 import { useState } from 'react';
 
+/**
+ * Prevent XSS attacks by stripping HTML/XML tags
+ * @param {string} dirtyInput - Raw string from input field
+ * @returns {string} Sanitized, plain-text string
+ */
+function sanitize(dirtyInput) {
+    const doc = new DOMParser().parseFromString(dirtyInput, 'text/html');
+    return doc.body.textContent || "";
+}
+
 export default function AddMealForm({ dateString, onAdd, onCancel }) {
     const [mealType, setMealType] = useState('Breakfast');
     const [mealName, setMealName] = useState('');
+    const [error, setError] = useState('');
 
     function handleSubmit(e) {
         e.preventDefault();
-        onAdd({ mealType, mealName });
+
+        // Sanitize and validate input
+        const sanitizedName = sanitize(mealName.trim());
+
+        if (!sanitizedName) {
+            setError('Meal name cannot be empty.');
+            return;
+        }
+
+        onAdd({ mealType, mealName: mealName.trim() });
+
         setMealName('');
         setMealType('Breakfast');
+        setError('');
     }
 
     return(
@@ -23,13 +45,30 @@ export default function AddMealForm({ dateString, onAdd, onCancel }) {
                 <option>Lunch</option>
                 <option>Dinner</option>
             </select>
-            <input
-                type="text"
-                placeholder="Meal Name"
-                value={mealName}
-                onChange={(e) => setMealName(e.target.value)}
-                className="input input-bordered w-full"
-            />
+
+            {/* Input and Error Message */}
+            <div>
+                <input
+                    type="text"
+                    placeholder="Meal Name"
+                    value={mealName}
+                    onChange={(e) => {
+                        setMealName(e.target.value);
+                        if (error) {
+                            setError('');
+                        }
+                    }}
+                    maxLength="30"
+
+                    className={`input input-bordered w-full ${error ? 'input-error': ''}`}
+                    aria-invalid={!!error}
+                    aria-describedby={error ? "meal-name-error" : undefined}
+                />
+                <div className={`text-xs text-right mt-1 ${mealName.length >= 28 ? 'text-error' : 'text-base-content/50'}`}>
+                    {mealName.length} / 30
+                </div>
+                {error && <p id="meal-name-error" className="text-error text-sm mt-1">{error}</p>}
+            </div>
 
             {/* Save and Cancel Button */}
             <div className="flex gap-2">
@@ -37,6 +76,7 @@ export default function AddMealForm({ dateString, onAdd, onCancel }) {
                     type="submit"
                     className="btn btn-success"
                     title="Save"
+                    disabled={!mealName.trim()}
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
