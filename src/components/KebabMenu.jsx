@@ -7,15 +7,18 @@ export default function KebabMenu({ onEdit, onDelete }) {
     const [menuOpen, setMenuOpen] = useState(false);
     const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
     const kebabButtonRef = useRef();
+    const menuDropdownRef = useRef();
     
     useEffect(() => {
         function handleClickOutside(event) {
             if (
-                kebabButtonRef.current &&
-                !kebabButtonRef.current.contains(event.target)
+                (kebabButtonRef.current && kebabButtonRef.current.contains(event.target)) ||
+                (menuDropdownRef.current && menuDropdownRef.current.contains(event.target))
             ) {
-                setMenuOpen(false);
+                return;
             }
+            console.log('[Kebab Menu] Clicked outside, closing menu');
+            setMenuOpen(false);
         }
         if (menuOpen) {
             document.addEventListener('mousedown', handleClickOutside);
@@ -39,13 +42,26 @@ export default function KebabMenu({ onEdit, onDelete }) {
 
     function toggleMenu(e) {
         e.stopPropagation();
-        setMenuOpen((open) => !open);
+        setMenuOpen((open) => {
+            const newState = !open;
+            console.log('[Kebab Menu] toggleMenu - setting menuOpen:', newState);
+            return newState;
+        });
     }
 
     function handleAction(action) {
+        console.log(`[Kebab Menu] handleAction: ${action}`);
         setMenuOpen(false);
-        if (action === 'edit') onEdit();
-        if (action === 'delete') onDelete();
+        if (action === 'edit') {
+            console.log('[Kebab Menu] Calling onEdit prop');
+            onEdit && onEdit();
+        } 
+
+        if (action === 'delete') {
+            console.log('[Kebab Menu] Calling onDelete prop');
+            onDelete && onDelete();
+        } 
+
     }
 
     function handleKeyDown(e) {
@@ -67,6 +83,7 @@ export default function KebabMenu({ onEdit, onDelete }) {
             </button>
             {menuOpen && createPortal (
                 <ul
+                    ref={menuDropdownRef}
                     className="menu menu-sm dropdown-content mt-1 p-2 shadow bg-base-100 rounded-box z-[9999]"
                     style={{ 
                         position: 'absolute',
