@@ -6,7 +6,7 @@ module.exports = {
         extend: {
             colors: {
                 cozy: {
-                    DEFAULT: '#faf1f0',    // primary bg
+                    DEFAULT: '#fff6f5',    // primary bg
                     card:   '#F9F9F9',     // card/inner surface
                     accent: '#F5F5DC',     // accent, e.g. beige
                     blue: '#a8d8ea',     // buttons

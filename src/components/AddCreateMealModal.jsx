@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Plus, Folder } from 'lucide-react';
 import AddMealForm from './AddMealForm';
 import MealTemplateLibrary from './MealTemplateLibrary';
@@ -10,8 +10,26 @@ export default function AddCreateMealModal({ dateString, isOpen, onClose, onAddM
     // (Optional: You can use an effect to auto-reset on open)
     if (!isOpen && step !== 'choose') setStep('choose');
 
+    // ESC key closes modal when open
+    useEffect(() => {
+        if (!isOpen) return;
+        function handleEsc(e) {
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                onClose();
+            }
+        }
+        document.addEventListener('keydown', handleEsc);
+        return () => document.removeEventListener('keydown', handleEsc);
+    }, [isOpen, onClose]);
+
     return isOpen ? (
-        <dialog id="add-create-modal" className="modal modal-open">
+        <dialog id="add-create-modal"
+            className="modal modal-open"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="add-meal-modal-title"
+        >
             <div className="modal-box max-w-md">
                 <form method="dialog">
                     <button
@@ -23,7 +41,7 @@ export default function AddCreateMealModal({ dateString, isOpen, onClose, onAddM
                 </form>
                 {step === 'choose' && (
                     <div className="flex flex-col items-center gap-4">
-                        <h2 className="text-lg font-bold mb-2">Add a Meal</h2>
+                        <h2 id="add-meal-modal-title" className="text-lg font-bold mb-2">Add a Meal</h2>
                         <button
                             className="btn bg-cozy-blue text-gray-900 hover:bg-cozy-dark btn-lg w-full flex items-center gap-2"
                             onClick={() => setStep('add')}
@@ -76,7 +94,7 @@ export default function AddCreateMealModal({ dateString, isOpen, onClose, onAddM
                 )}
             </div>
             <form method="dialog" className="modal-backdrop">
-                <button onClick={onClose}>close</button>
+                <button aria-label="Close modal" onClick={onClose} tabIndex={-1}>close</button>
             </form>
         </dialog>
     ) : null;

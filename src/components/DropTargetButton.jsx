@@ -13,7 +13,7 @@ import { useCalendar } from '../context/CalendarContext';
  *  - className: CSS classes for the button
  *  - children: your arrow icon or text
  */
-export default function DropTargetButton({ direction, children, className=''}) {
+export default function DropTargetButton({ direction, children, className='', onDropMeal, ...props}) {
     const { moveMeal } = useMeals();
     const { goPrevious, goNext } = useCalendar();
     const timeoutRef = useRef(null);
@@ -54,9 +54,14 @@ export default function DropTargetButton({ direction, children, className=''}) {
             newDate.setDate(newDate.getDate() + offSet);
             const toKey = toLocalDateKey(newDate);
 
-            // Actually move the meal, *then* navigate
-            moveMeal(item.meal, fromKey, toKey);
-            direction === 'next' ? goNext() : goPrevious()
+            if (onDropMeal) {
+                onDropMeal(item.meal, fromKey, toKey); // call parent handler
+            } else {
+                // fallback: moveMeal and navigate as before
+                moveMeal(item.meal, fromKey, toKey);
+            direction === 'next' ? goNext() : goPrevious();
+            }
+            
         },
         leave: () => {
             cancelHoverTimer();
@@ -77,6 +82,7 @@ export default function DropTargetButton({ direction, children, className=''}) {
                     ${isOver ? 'bg-blue-300 scale-105' : 'bg-gray-200 hover:bg-gray-300'}
                     ${isOver ? (direction === 'next' ? 'animate-wiggle-right' : 'animate-wiggle-left') : ''}
                 `}
+                {...props}
             >
                 {children}
             </button>

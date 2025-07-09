@@ -27,10 +27,14 @@ export default function AddMealForm({ dateString, onAdd, onCancel }) {
 
     return(
         <form onSubmit={(e) => handleSubmit(e, dateString)} className="flex flex-col gap-2 bg-base-100 p-4 rounded-box shadow-md max-w-xs mx-auto mt-1 sm:mt-2">
+            {/* Accessible label for meal type */}
+            <label htmlFor="meal-type-select" className="sr-only">Meal Type</label>
             <select
+                id="meal-type-select"
                 value={mealType}
                 onChange={(e) => setMealType(e.target.value)}
                 className="select select-bordered w-full"
+                aria-label="Meal Type"
             >
                 <option>Breakfast</option>
                 <option>Lunch</option>
@@ -39,7 +43,9 @@ export default function AddMealForm({ dateString, onAdd, onCancel }) {
 
             {/* Input and Error Message */}
             <div>
+                <label htmlFor="meal-name-input" className="sr-only">Meal Name</label>
                 <input
+                    id="meal-name-input"
                     type="text"
                     placeholder="Meal Name"
                     value={mealName}
@@ -54,6 +60,7 @@ export default function AddMealForm({ dateString, onAdd, onCancel }) {
                     className={`input input-bordered w-full ${error ? 'input-error': ''}`}
                     aria-invalid={!!error}
                     aria-describedby={error ? "meal-name-error" : undefined}
+                    aria-label="Meal Name"
                 />
                 <div className={`text-xs text-right mt-1 ${mealName.length >= 28 ? 'text-error' : 'text-base-content/50'}`}>
                     {mealName.length} / 30
@@ -67,6 +74,7 @@ export default function AddMealForm({ dateString, onAdd, onCancel }) {
                     type="submit"
                     className="btn btn-success"
                     title="Save"
+                    aria-label="Save Meal"
                     disabled={!mealName.trim()}
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -77,6 +85,7 @@ export default function AddMealForm({ dateString, onAdd, onCancel }) {
                     type="button"
                     className="btn btn-ghost"
                     title="Cancel"
+                    aria-label="Cancel"
                     onClick={onCancel}
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">

@@ -8,12 +8,16 @@ import { useMealDrag } from '../hooks/useMealDrag';
 function DraggableMiniMeal({ meal }) {
     const [{ isDragging }, drag] = useMealDrag(meal);
 
+    const ariaLabel = `${meal.mealType} : ${meal.mealName}`;
+
     return (
         <div
             ref={drag}
             className={`text-xs w-full truncate cursor-move ${isDragging ? 'opacity-50' : ''}`}
             data-testid="DraggableMiniMeal"
             title={meal.mealName}
+            tabIndex={0}
+            aria-label={ariaLabel}
         >
             <span>
                 {meal.mealType === 'Breakfast'

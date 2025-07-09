@@ -40,6 +40,7 @@ export default function Header() {
                             ? 'bg-cozy-blue text-gray-900 hover:bg-cozy-dark'
                             : 'bg-white text-gray-600 border border-cozy-accent hover:bg-cozy-blue/20'}`}
                         onClick={() => setViewMode('week')}
+                        aria-current={viewMode === 'week' ? 'page' : undefined}
                     >
                         Week
                     </button>
@@ -48,6 +49,7 @@ export default function Header() {
                             ? 'bg-cozy-blue text-gray-900 hover:bg-cozy-dark'
                             : 'bg-white text-gray-600 border border-cozy-accent hover:bg-cozy-blue/20'}`}
                         onClick={() => setViewMode('month')}
+                        aria-current={viewMode === 'month' ? 'page' : undefined}
                     >
                         Month
                     </button>
@@ -66,18 +68,19 @@ export default function Header() {
                                 goPrevious()
                             }}
                             className="btn btn-sm"
+                            aria-label={`Go to previous ${viewMode}`}
                         >
                             <ChevronLeft size={20} />
                         </DropTargetButton>
 
-                        <h3 className="text-xl font-semibold mx-4 text-center leading-tight">
+                        <h2 className="text-xl font-semibold mx-4 text-center leading-tight">
                             <span className="hidden sm:inline">
                                 {main}
                                 <br />
                                 <span className="text-xs font-light text-base-content/60">{year}</span>
                             </span>
                             <span className="sm:hidden">{formatWeekRange(startDate, endDate, { includeYear: false })}</span>
-                        </h3>
+                        </h2>
                         
                         <DropTargetButton
                             title="Next"
@@ -88,6 +91,7 @@ export default function Header() {
                                 goNext()
                             }}
                             className="btn btn-sm"
+                            aria-label={`Go to next ${viewMode}`}
                         >
                             <ChevronRight size={20} />
                         </DropTargetButton>
@@ -98,6 +102,7 @@ export default function Header() {
                             title="Previous"
                             onClick={goPrevious}
                             className="btn btn-sm bg-gray-200 hover:bg-gray-300"
+                            aria-label={`Go to previous ${viewMode}`}
                         >
                             <ChevronLeft size={20} />
                         </button>
@@ -112,6 +117,7 @@ export default function Header() {
                             title="Next"
                             onClick={goNext}
                             className="btn btn-sm bg-gray-200 hover:bg-gray-300"
+                            aria-label={`Go to next ${viewMode}`}
                         >
                             <ChevronRight size={20} />
                         </button>
