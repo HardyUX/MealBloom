@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "generate-sitemap": "node generate-sitemap.cjs",
+    "build": "npm run generate-sitemap && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "jest",
@@ -25,6 +26,7 @@
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^19.0.0",
+    "sitemap": "^8.0.0",
     "tailwindcss": "^4.1.4"
   },
   "devDependencies": {
