@@ -39,9 +39,9 @@ function MonthView({ meals, onMealDrop }) {
                 ))}
             </div>
 
-            <div className="grid grid-cols-7 gap-px sm:gap-2">
+            <div className="grid grid-cols-7 gap-px sm:gap-2" role="grid">
                 {days.map((day, i) => (
-                    <div key={i} className="rounded-lg shadow-sm min-h-[80px]">
+                    <div key={i} className="rounded-lg shadow-sm min-h-[80px]" role="gridcell">
                         <DayCell
                             day={day}
                             meals={meals}

@@ -75,6 +75,8 @@ export default function KebabMenu({ onEdit, onDelete }) {
             <button
                 className="btn btn-ghost btn-xs"
                 aria-label="Show actions"
+                aria-haspopup="true"
+                aria-expanded={menuOpen}
                 onClick={toggleMenu}
                 tabIndex={0}
                 ref={kebabButtonRef}
@@ -84,6 +86,7 @@ export default function KebabMenu({ onEdit, onDelete }) {
             {menuOpen && createPortal (
                 <ul
                     ref={menuDropdownRef}
+                    role="menu"
                     className="menu menu-sm dropdown-content mt-1 p-2 shadow bg-base-100 rounded-box z-[9999]"
                     style={{ 
                         position: 'absolute',
@@ -93,7 +96,7 @@ export default function KebabMenu({ onEdit, onDelete }) {
                     onKeyDown={handleKeyDown}
                 >
                     <li>
-                        <button onClick={() => handleAction('edit')} aria-label="Edit meal">
+                        <button onClick={() => handleAction('edit')} aria-label="Edit meal" role="menuitem">
                             Edit
                         </button>
                     </li>
@@ -101,7 +104,9 @@ export default function KebabMenu({ onEdit, onDelete }) {
                         <button
                             className="text-error"
                             onClick={() => handleAction('delete')}
-                            aria-label="Delete meal">
+                            aria-label="Delete meal"
+                            role="menuitem"
+                        >
                             Delete
                         </button>
                     </li>

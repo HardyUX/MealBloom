@@ -52,7 +52,9 @@ export default function EditMealForm({ meal, onUpdate, onCancel }) {
 
                         {/* Date Input with Error Handling */}
                         <div>
+                            <label htmlFor="edit-date-input" className="sr-only">Meal Date</label>
                             <input
+                                id="edit-date-input"
                                 className={`input input-bordered w-full ${errors.date ? 'input-error' : ''}`}
                                 type="date"
                                 value={date}
@@ -66,10 +68,13 @@ export default function EditMealForm({ meal, onUpdate, onCancel }) {
                             {errors.date && <p id="edit-date-error" className="text-error text-sm mt-1">{errors.date}</p>}
                         </div>
 
+                        <label htmlFor="edit-meal-type-select" className="sr-only">Meal Type</label>
                         <select
+                            id="edit-meal-type-select"
                             className="select select-bordered w-full"
                             value={mealType}
                             onChange={(e) => setMealType(e.target.value)}
+                            aria-label="Meal Type"
                         >
                             <option>Breakfast</option>
                             <option>Lunch</option>
@@ -78,7 +83,9 @@ export default function EditMealForm({ meal, onUpdate, onCancel }) {
 
                         {/* Meal Name Input with Error Handling */}
                         <div>
+                            <label htmlFor="edit-meal-name-input" className="sr-only">Meal Name</label>
                             <input
+                                id="edit-meal-name-input"
                                 className={`input input-bordered w-full ${errors.mealName ? 'input-error' : ''}`}
                                 type="text"
                                 placeholder="Meal Name"
@@ -90,9 +97,11 @@ export default function EditMealForm({ meal, onUpdate, onCancel }) {
                                 maxLength="30"
                                 aria-invalid={!!errors.mealName}
                                 aria-describedby={errors.mealName ? "edit-meal-name-error" : undefined}
+                                aria-label="Meal Name"
                             />
-                            <div className={`text-xs text-right mt-1 ${mealName.length >= 28 ? 'text-error' : 'text-base-content/50'}`}>
+                            <div className={`text-xs text-right mt-1 ${mealName.length >= 28 ? 'text-error font-bold' : 'text-base-content/50'}`}>
                                 {mealName.length} / 30
+                                {mealName.length >= 28 && <span aria-hidden="true" className="ml-1 font-bold">*</span>}
                             </div>
                             {errors.mealName && <p id="edit-name-error" className="text-error text-sm mt-1">{errors.mealName}</p>}
                         </div>

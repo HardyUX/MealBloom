@@ -6,6 +6,7 @@ export default function FavoriteButton({ isFavorited, onToggle, ariaLabel }) {
         <button
             className="btn btn-ghost btn-xs absolute top-2 right-2 z-20"
             aria-label={ariaLabel}
+            aria-pressed={isFavorited}
             onClick={(e) => { e.stopPropagation(); onToggle(); }}
             tabIndex={0}
         >

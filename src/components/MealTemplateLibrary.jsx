@@ -21,7 +21,7 @@ function MealTemplateLibrary({ onUseTemplate }) {
                     <p className="text-base-content/60 text-sm">No templates saved yet.</p>
                 ) : (
                     // Render template list
-                    <ul className="flex flex-col gap-2">
+                    <ul className="flex flex-col gap-2" aria-live="polite">
                         {templates.map((template) => (
                             <li key={template.id} className="flex justify-between items-center">
                                 <div>

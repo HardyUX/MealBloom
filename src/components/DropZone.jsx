@@ -12,6 +12,8 @@ function DropZone({ dateString, children, onMealDrop, highlight }) {
                 isOver ? "bg-primary/10 ring-2 ring-primary" : "",
                 highlight ? "ring-2 ring-accent" : ""
             ].join(" ")}
+            role="region"
+            aria-label={`Meal drop area for ${dateString}`}
         >
             {children}
         </div>
